@@ -1,0 +1,17 @@
+MIG: 21:37:37 : ################# RUNNING MIG BATCH ###################
+MIG: 21:37:37 : MIG::Writing IN file for 'mig_7series_0'...compDirPath: /drv_s2/xilinx/Vivado/2014.4/data/ip/xilinx/mig_7series_v2_2... instDirPath: /drv_s2/usb-fpga/ztex/examples/memfifo/fpga-2.13/memfifo.srcs/sources_1/ip/mig_7series_0
+MIG: 21:37:37 : synp_flow:  -- synthesis_mode: Other
+MIG: 21:37:37 : outputDirectory: /drv_s2/usb-fpga/ztex/examples/memfifo/fpga-2.13/memfifo.srcs/sources_1/ip/mig_7series_0/_tmp/
+MIG: 21:37:37 : vivado_mode: xpg_pa
+MIG: 21:37:37 : HDL Language: Verilog
+MIG: 21:37:37 : compInfo: false
+MIG: 21:37:37 : Vivado Options xc7a100t csg324 -2
+MIG: 21:37:37 : 1: xc7a100t 2: csg324 3: -2
+MIG: 21:37:37 : relative mig path: coregen/ip/xilinx/other/com/xilinx/ip/mig_7series_v2_2/bin/lin/mig
+MIG: 21:37:37 : xilinx_path: /drv_s2/xilinx/Vivado/2014.4/ids_lite/ISE
+MIG: 21:37:37 : Without MYMIG
+MIG: 21:37:37 : mig_exec path: /drv_s2/xilinx/Vivado/2014.4/ids_lite/ISE/coregen/ip/xilinx/other/com/xilinx/ip/mig_7series_v2_2/bin/lin/mig
+MIG: 21:37:37 : mig_exec path: /drv_s2/xilinx/Vivado/2014.4/ids_lite/ISE/coregen/ip/xilinx/other/com/xilinx/ip/mig_7series_v2_2/bin/lin/mig
+MIG: 21:37:37 : mig_bin: /drv_s2/xilinx/Vivado/2014.4/ids_lite/ISE/coregen/ip/xilinx/other/com/xilinx/ip/mig_7series_v2_2/bin/lin/mig
+MIG: 21:37:37 : /drv_s2/xilinx/Vivado/2014.4/ids_lite/ISE/coregen/ip/xilinx/other/com/xilinx/ip/mig_7series_v2_2/bin/lin/mig -- /drv_s2/usb-fpga/ztex/examples/memfifo/fpga-2.13/memfifo.srcs/sources_1/ip/mig_7series_0/xil_upgrade.out -- /drv_s2/usb-fpga/ztex/examples/memfifo/fpga-2.13/memfifo.srcs/sources_1/ip/mig_7series_0/xil_upgrade.in
+MIG: 21:37:37 : Running /drv_s2/xilinx/Vivado/2014.4/ids_lite/ISE/coregen/ip/xilinx/other/com/xilinx/ip/mig_7series_v2_2/bin/lin/mig -cg_exc_inp /drv_s2/usb-fpga/ztex/examples/memfifo/fpga-2.13/memfifo.srcs/sources_1/ip/mig_7series_0/xil_upgrade.in -cg_exc_out /drv_s2/usb-fpga/ztex/examples/memfifo/fpga-2.13/memfifo.srcs/sources_1/ip/mig_7series_0/xil_upgrade.out ... 

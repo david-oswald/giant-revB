@@ -1,0 +1,163 @@
+Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2014.4 (lin32) Build 1071353 Tue Nov 18 16:37:30 MST 2014
+| Date         : Thu Sep 22 21:38:45 2016
+| Host         : ws2 running 32-bit Debian GNU/Linux 6.0.10 (squeeze)
+| Command      : upgrade_ip
+| Device       : xc7a200tfbg484-2
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'mig_7series_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the update of mig_7series_0 (xilinx.com:ip:mig_7series:2.3) to current project options.
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading IP 'mig_7series_0'. These changes may impact your design.
+
+
+-upgrade has removed port 'app_addr'
+-upgrade has removed port 'app_cmd'
+-upgrade has removed port 'app_en'
+-upgrade has removed port 'app_rd_data'
+-upgrade has removed port 'app_rd_data_end'
+-upgrade has removed port 'app_rd_data_valid'
+-upgrade has removed port 'app_rdy'
+-upgrade has removed port 'app_ref_ack'
+-upgrade has removed port 'app_ref_req'
+-upgrade has removed port 'app_sr_active'
+-upgrade has removed port 'app_sr_req'
+-upgrade has removed port 'app_wdf_data'
+-upgrade has removed port 'app_wdf_end'
+-upgrade has removed port 'app_wdf_mask'
+-upgrade has removed port 'app_wdf_rdy'
+-upgrade has removed port 'app_wdf_wren'
+-upgrade has removed port 'app_zq_ack'
+-upgrade has removed port 'app_zq_req'
+-upgrade has removed port 'aresetn'
+-upgrade has removed port 'clk_ref_i'
+-upgrade has removed port 'ddr3_addr'
+-upgrade has removed port 'ddr3_ba'
+-upgrade has removed port 'ddr3_cas_n'
+-upgrade has removed port 'ddr3_ck_n'
+-upgrade has removed port 'ddr3_ck_p'
+-upgrade has removed port 'ddr3_cke'
+-upgrade has removed port 'ddr3_dm'
+-upgrade has removed port 'ddr3_dq'
+-upgrade has removed port 'ddr3_dqs_n'
+-upgrade has removed port 'ddr3_dqs_p'
+-upgrade has removed port 'ddr3_odt'
+-upgrade has removed port 'ddr3_ras_n'
+-upgrade has removed port 'ddr3_reset_n'
+-upgrade has removed port 'ddr3_we_n'
+-upgrade has removed port 'device_temp_i'
+-upgrade has removed port 'init_calib_complete'
+-upgrade has removed port 'sys_clk_i'
+-upgrade has removed port 'ui_clk'
+-upgrade has removed port 'ui_clk_sync_rst'
+-upgrade has added port 'clk_ref_n'
+-upgrade has added port 'clk_ref_p'
+
+
+
+
+
+
+Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2014.4 (lin32) Build 1071353 Tue Nov 18 16:37:30 MST 2014
+| Date         : Mon Jan 25 17:02:10 2016
+| Host         : ws2 running 32-bit Debian GNU/Linux 6.0.9 (squeeze)
+| Command      : upgrade_ip
+| Device       : xc7a35tcsg324-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'mig_7series_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of mig_7series_0 from xilinx.com:ip:mig_7series:2.1 to xilinx.com:ip:mig_7series:2.3
+
+2. Warnings
+-----------
+
+ERROR: IP Component directory path (/drv_s2/xilinx/Vivado/2014.4/data/ip/xilinx/mig_7series_v2_2) mentioned is not valid. Please provide valid IP Dir path
+
+
+3. Upgrade messages
+-------------------
+
+Failed to execute command 'namespace eval ::ipgen_mig_7series_v2_3_utils {::xcoUpgradeLib::upgradeXCI mig_7series_v2_1 mig_7series_v2_3 ::ipgen_mig_7series_v2_3_utils ::xcoUpgradeLib::xciArray}' :
+	child killed: segmentation violation
+
+
+
+
+
+
+
+Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------
+| Tool Version : Vivado v.2014.2 (lin32) Build 932637 Wed Jun 11 13:08:21 MDT 2014
+| Date         : Tue Jul  8 21:10:20 2014
+| Host         : ws2 running 32-bit Debian GNU/Linux 6.0.9 (squeeze)
+| Command      : upgrade_ip
+| Device       : xc7a35tcsg324-1
+-----------------------------------------------------------------------------------
+
+Upgrade Log for IP 'mig_7series_0'
+
+1. Summary
+----------
+
+SUCCESS in the update of mig_7series_0 (xilinx.com:ip:mig_7series:2.1) to current project options.
+
+
+
+
+
+
+Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------
+| Tool Version : Vivado v.2014.2 (lin32) Build 932637 Wed Jun 11 13:08:21 MDT 2014
+| Date         : Tue Jul  8 18:01:04 2014
+| Host         : ws2 running 32-bit Debian GNU/Linux 6.0.9 (squeeze)
+| Command      : upgrade_ip
+| Device       : xc7a50tcsg324-1
+-----------------------------------------------------------------------------------
+
+Upgrade Log for IP 'mig_7series_0'
+
+1. Summary
+----------
+
+SUCCESS in the update of mig_7series_0 (xilinx.com:ip:mig_7series:2.1) to current project options.
+
+
+
+
+
+
+Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------
+| Tool Version : Vivado v.2014.2 (lin32) Build 932637 Wed Jun 11 13:08:21 MDT 2014
+| Date         : Tue Jul  8 17:56:21 2014
+| Host         : ws2 running 32-bit Debian GNU/Linux 6.0.9 (squeeze)
+| Command      : upgrade_ip
+| Device       : xc7a75tcsg324-2
+-----------------------------------------------------------------------------------
+
+Upgrade Log for IP 'mig_7series_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of mig_7series_0 from xilinx.com:ip:mig_7series:2.0 (Rev. 1) to xilinx.com:ip:mig_7series:2.1
+

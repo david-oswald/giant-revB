@@ -1,0 +1,3 @@
+# Output products list for <memory_controller>
+memory_controller.xco
+memory_controller_flist.txt

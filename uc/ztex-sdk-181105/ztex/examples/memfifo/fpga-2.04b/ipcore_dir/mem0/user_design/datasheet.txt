@@ -1,0 +1,65 @@
+
+
+CORE Generator Options:
+   Target Device              : xc6slx16-ftg256
+   Speed Grade                : -2
+   HDL                        : verilog
+   Synthesis Tool             : Foundation_ISE
+
+MIG Output Options:
+   Component Name             : mem0
+   No of Controllers          : 1
+   Hardware Test Bench           : disabled
+
+    
+/*******************************************************/
+/*                  Controller 3                       */
+/*******************************************************/
+Controller Options : 
+   Memory                  : DDR_SDRAM
+   Interface               : NATIVE
+   Design Clock Frequency  : 5000 ps (200.00 MHz)
+   Memory Type             : Components
+   Memory Part             : MT46V32M16XX-5B-IT
+   Equivalent Part(s)      : MT46V32M16BN-5B-IT
+   Row Address             : 13
+   Bank Address            : 2
+   Data Mask               : enabled
+
+Memory Options :
+   Mode Register :
+   Burst Length                       : 4(010)
+   CAS Latency                        : 3
+   DLL Enable                         : Enable-Normal
+   Output Drive Strength              : Normal
+
+User Interface Parameters :
+   Configuration Type     : Two 32-bit bi-directional and four 32-bit unidirectional ports
+   Ports Selected         : Port0, Port1, Port2, Port3, Port4, Port5
+   Memory Address Mapping : ROW_BANK_COLUMN
+
+   Arbitration Algorithm  : Round Robin
+
+   Arbitration            : 
+      Time Slot0 : 012345
+      Time Slot1 : 123450
+      Time Slot2 : 234501
+      Time Slot3 : 345012
+      Time Slot4 : 450123
+      Time Slot5 : 501234
+      Time Slot6 : 012345
+      Time Slot7 : 123450
+      Time Slot8 : 234501
+      Time Slot9 : 345012
+      Time Slot10: 450123
+      Time Slot11: 501234
+
+FPGA Options :
+   Class for Address and Control       : II
+   Class for Data                      : II
+   Memory Interface Pin Termination    : EXTERN_TERM
+   DQ/DQS                              : 25 Ohms
+   Bypass Calibration                  : enabled
+   Debug Signals for Memory Controller : Disable
+   Input Clock Type                    : Single-Ended 
+    
