@@ -3,6 +3,8 @@
 import time
 import serial as ser
 import uu
+from glitcher import glitcher
+import logging
 
 PROTECTED = "prot"
 UNPROTECTED = "unprot"
@@ -93,6 +95,8 @@ def check_protected(serial, khz, debugPrint):
     if r is None:
         return PROTECTED
     else:
+        print("Yeah, unprotected")
+        print(r)
         return UNPROTECTED
         
     return (r == None)
@@ -103,7 +107,38 @@ def close_port(serial):
 if __name__=="__main__":
     port = open_port(SER_PORT, 115200)
     
+    logging.basicConfig(level = logging.INFO)
+    
+    glitcher = glitcher()
+    glitcher.reset_fpga() 
+    
+    # Set the fault voltage, normal voltage, off voltage
+    glitcher.set_voltages(0.6, 1.7, 0)
+    
+    glitcher.dac.setTestModeEnabled(0)
+    glitcher.dac.setRfidModeEnabled(0)
+
+   
+    
+    # Clean up any previous pulses
+    glitcher.dac.clearPulses()
+
+    # Set a pulse
+    glitcher.add_pulse(100000, 5000)
+    
+    # Reset uc
+    glitcher.dac.setEnabled(False)
+    time.sleep(.1)
+    glitcher.dac.setEnabled(True)
+
+    # Arm the fault
+    glitcher.dac.arm()
+
+    # Generate a software trigger
+    glitcher.dac.softwareTrigger()  
+    
     status = check_protected(port, 12000, False);
+    #status = False
     
     if status == False:
         print("Communication failed, restarting")
@@ -115,6 +150,7 @@ if __name__=="__main__":
         print("Invalid return value!")
     
     close_port(port)
+    glitcher.close()
 
 
 

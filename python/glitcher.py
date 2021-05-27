@@ -2,6 +2,7 @@ from spartan6_fpga import spartan6_fpga
 from fpga import Commands, Registers, Register_Bits, FPGA_Vars
 from dac import dac
 import logging
+import time
 
 
 class glitcher:
@@ -104,6 +105,8 @@ class glitcher:
 
         # Set the fault voltage, normal voltage, off voltage
         self.set_voltages(0, 3.3, 0)
+        
+
 
         # Clean up any previous pulses
         self.dac.clearPulses()
