@@ -74,37 +74,37 @@ entity main is
 		dac_clk : out std_logic;
 		
 		-- ADC interface
-		adc_v_in : in std_logic_vector(7 downto 0);
-		adc_encode : out std_logic;
+--		adc_v_in : in std_logic_vector(7 downto 0);
+--		adc_encode : out std_logic;
 		
-		-- DDR interface
-		mcb3_dram_dq    : inout std_logic_vector(15 downto 0);
-		mcb3_dram_a     : out std_logic_vector(12 downto 0);
-		mcb3_dram_ba    : out std_logic_vector(1 downto 0);
-		mcb3_dram_cke   : out std_logic;
-		mcb3_dram_ras_n : out std_logic;
-		mcb3_dram_cas_n : out std_logic;
-		mcb3_dram_we_n  : out std_logic;
-		mcb3_dram_dm    : out std_logic;
-		mcb3_dram_udqs  : inout  std_logic;
-		mcb3_rzq        : inout  std_logic;
-		mcb3_dram_udm   : out std_logic;
-		mcb3_dram_dqs   : inout  std_logic;
-		mcb3_dram_ck    : out std_logic;
-		mcb3_dram_ck_n  : out std_logic;
-		
-		-- USB FIFO
-		IFCLK         : in std_logic;
-		FD            : out std_logic_vector(15 downto 0); 
-		SLOE          : out std_logic;
-		SLRD          : out std_logic;
-		SLWR          : out std_logic;
-		FIFOADR0      : out std_logic;
-		FIFOADR1      : out std_logic;
-		PKTEND        : out std_logic;
-		EMPTYFLAGC	  : in std_logic;
-		FULLFLAGB	  : in std_logic;
-		FLAGA	      : in std_logic;
+--		-- DDR interface
+--		mcb3_dram_dq    : inout std_logic_vector(15 downto 0);
+--		mcb3_dram_a     : out std_logic_vector(12 downto 0);
+--		mcb3_dram_ba    : out std_logic_vector(1 downto 0);
+--		mcb3_dram_cke   : out std_logic;
+--		mcb3_dram_ras_n : out std_logic;
+--		mcb3_dram_cas_n : out std_logic;
+--		mcb3_dram_we_n  : out std_logic;
+--		mcb3_dram_dm    : out std_logic;
+--		mcb3_dram_udqs  : inout  std_logic;
+--		mcb3_rzq        : inout  std_logic;
+--		mcb3_dram_udm   : out std_logic;
+--		mcb3_dram_dqs   : inout  std_logic;
+--		mcb3_dram_ck    : out std_logic;
+--		mcb3_dram_ck_n  : out std_logic;
+--		
+--		-- USB FIFO
+--		IFCLK         : in std_logic;
+--		FD            : out std_logic_vector(15 downto 0); 
+--		SLOE          : out std_logic;
+--		SLRD          : out std_logic;
+--		SLWR          : out std_logic;
+--		FIFOADR0      : out std_logic;
+--		FIFOADR1      : out std_logic;
+--		PKTEND        : out std_logic;
+--		EMPTYFLAGC	  : in std_logic;
+--		FULLFLAGB	  : in std_logic;
+--		FLAGA	      : in std_logic;
 			
 		-- user I/O pins
 		gpio : inout std_logic_vector(7 downto 0)
@@ -162,62 +162,62 @@ architecture behavioral of main is
 		);
 	end component;
    
-	component memory_interface is
-		generic
-		(
-			C3_P0_MASK_SIZE           : integer := 4;
-			C3_P0_DATA_PORT_SIZE      : integer := 32;
-			C3_P1_MASK_SIZE           : integer := 4;
-			C3_P1_DATA_PORT_SIZE      : integer := 32;
-			C3_NUM_DQ_PINS          : integer := 16; 
-			C3_MEM_ADDR_WIDTH       : integer := 13; 
-			C3_MEM_BANKADDR_WIDTH   : integer := 2 
-		);
-		port (
-			clk : in std_logic;
-			reset : in std_logic; 
-			single_write	 : in byte;
-			single_write_w	 : in std_logic;
-			single_write_commit : in std_logic;
-			single_read	 	 : out byte;
-			single_read_r	 : in std_logic;
-			single_read_commit : in std_logic;
-			address : in byte;
-			address_w : in std_logic;
-			block_count      : in byte;
-			block_count_w    : in std_logic;
-			slave_fifo_start : in std_logic;
-			status : out byte;
+--	component memory_interface is
+--		generic
+--		(
+--			C3_P0_MASK_SIZE           : integer := 4;
+--			C3_P0_DATA_PORT_SIZE      : integer := 32;
+--			C3_P1_MASK_SIZE           : integer := 4;
+--			C3_P1_DATA_PORT_SIZE      : integer := 32;
+--			C3_NUM_DQ_PINS          : integer := 16; 
+--			C3_MEM_ADDR_WIDTH       : integer := 13; 
+--			C3_MEM_BANKADDR_WIDTH   : integer := 2 
+--		);
+--		port (
+--			clk : in std_logic;
+--			reset : in std_logic; 
+--			single_write	 : in byte;
+--			single_write_w	 : in std_logic;
+--			single_write_commit : in std_logic;
+--			single_read	 	 : out byte;
+--			single_read_r	 : in std_logic;
+--			single_read_commit : in std_logic;
+--			address : in byte;
+--			address_w : in std_logic;
+--			block_count      : in byte;
+--			block_count_w    : in std_logic;
+--			slave_fifo_start : in std_logic;
+--			status : out byte;
 
-			mcb3_dram_dq    : inout std_logic_vector(C3_NUM_DQ_PINS-1 downto 0);
-			mcb3_dram_a     : out std_logic_vector(C3_MEM_ADDR_WIDTH-1 downto 0);
-			mcb3_dram_ba    : out std_logic_vector(C3_MEM_BANKADDR_WIDTH-1 downto 0);
-			mcb3_dram_cke   : out std_logic;
-			mcb3_dram_ras_n : out std_logic;
-			mcb3_dram_cas_n : out std_logic;
-			mcb3_dram_we_n  : out std_logic;
-			mcb3_dram_dm    : out std_logic;
-			mcb3_dram_udqs  : inout  std_logic;
-			mcb3_rzq        : inout  std_logic;
-			mcb3_dram_udm   : out std_logic;
-			mcb3_dram_dqs   : inout  std_logic;
-			mcb3_dram_ck    : out std_logic;
-			mcb3_dram_ck_n  : out std_logic;
-			dma_start       : in std_logic;
-			dma_input       : in std_logic_vector(15 downto 0);
-			IFCLK         : in std_logic;
-			FD            : out std_logic_vector(15 downto 0); 
-			SLOE          : out std_logic;
-			SLRD          : out std_logic;
-			SLWR          : out std_logic;
-			FIFOADR0      : out std_logic;
-			FIFOADR1      : out std_logic;
-			PKTEND        : out std_logic;
-			EMPTYFLAGC	  : in std_logic;
-			FULLFLAGB	  : in std_logic;
-			FLAGA	      : in std_logic
-		);
-	end component;
+--			mcb3_dram_dq    : inout std_logic_vector(C3_NUM_DQ_PINS-1 downto 0);
+--			mcb3_dram_a     : out std_logic_vector(C3_MEM_ADDR_WIDTH-1 downto 0);
+--			mcb3_dram_ba    : out std_logic_vector(C3_MEM_BANKADDR_WIDTH-1 downto 0);
+--			mcb3_dram_cke   : out std_logic;
+--			mcb3_dram_ras_n : out std_logic;
+--			mcb3_dram_cas_n : out std_logic;
+--			mcb3_dram_we_n  : out std_logic;
+--			mcb3_dram_dm    : out std_logic;
+--			mcb3_dram_udqs  : inout  std_logic;
+--			mcb3_rzq        : inout  std_logic;
+--			mcb3_dram_udm   : out std_logic;
+--			mcb3_dram_dqs   : inout  std_logic;
+--			mcb3_dram_ck    : out std_logic;
+--			mcb3_dram_ck_n  : out std_logic;
+--			dma_start       : in std_logic;
+--			dma_input       : in std_logic_vector(15 downto 0);
+--			IFCLK         : in std_logic;
+--			FD            : out std_logic_vector(15 downto 0); 
+--			SLOE          : out std_logic;
+--			SLRD          : out std_logic;
+--			SLWR          : out std_logic;
+--			FIFOADR0      : out std_logic;
+--			FIFOADR1      : out std_logic;
+--			PKTEND        : out std_logic;
+--			EMPTYFLAGC	  : in std_logic;
+--			FULLFLAGB	  : in std_logic;
+--			FLAGA	      : in std_logic
+--		);
+--	end component;
 	
 	component sc_controller is
 		generic(
@@ -244,28 +244,28 @@ architecture behavioral of main is
 		);
 	end component;
 	
-	component pic_programmer is
-		generic(
-			CLK_PERIOD : positive
-		);
-		port( 
-			clk : in std_logic;
-			reset : in std_logic;
-			data_in : in std_logic_vector(21 downto 0);
-			has_data : in std_logic;
-			get_response : in std_logic;
-			send : in std_logic;
-			prog_startstop : in std_logic;
-			start_and_send : in std_logic;
-			programming: out std_logic;
-			data_out : out std_logic_vector(13 downto 0);
-			v_dd_en : out std_logic;
-			v_pp_en : out std_logic;
-			pgm : out std_logic;
-			ispclk : out std_logic;
-			ispdat : inout std_logic
-		);
-	end component;
+--	component pic_programmer is
+--		generic(
+--			CLK_PERIOD : positive
+--		);
+--		port( 
+--			clk : in std_logic;
+--			reset : in std_logic;
+--			data_in : in std_logic_vector(21 downto 0);
+--			has_data : in std_logic;
+--			get_response : in std_logic;
+--			send : in std_logic;
+--			prog_startstop : in std_logic;
+--			start_and_send : in std_logic;
+--			programming: out std_logic;
+--			data_out : out std_logic_vector(13 downto 0);
+--			v_dd_en : out std_logic;
+--			v_pp_en : out std_logic;
+--			pgm : out std_logic;
+--			ispclk : out std_logic;
+--			ispdat : inout std_logic
+--		);
+--	end component;
 	
 	component dac_controller is
 		port ( 
@@ -285,29 +285,29 @@ architecture behavioral of main is
 		);
 	end component;
 	
-	component ask_modulator is
-		port( 
-			clk : in std_logic;
-			ce : in std_logic;
-			reset : in std_logic;
-			out_amplitude : in byte;
-			data : in std_logic;
-			modulated : out byte
-		);
-	end component;
+--	component ask_modulator is
+--		port( 
+--			clk : in std_logic;
+--			ce : in std_logic;
+--			reset : in std_logic;
+--			out_amplitude : in byte;
+--			data : in std_logic;
+--			modulated : out byte
+--		);
+--	end component;
 
-	component miller_encoder is
-		port( 
-			clk : in std_logic;
-			reset : in std_logic;
-			w_en : in std_logic;
-			data : in byte;
-			transmit : in std_logic;
-			omit_count : in byte;
-			encoded : out std_logic;
-			transmitting: out std_logic
-		);
-	end component;
+--	component miller_encoder is
+--		port( 
+--			clk : in std_logic;
+--			reset : in std_logic;
+--			w_en : in std_logic;
+--			data : in byte;
+--			transmit : in std_logic;
+--			omit_count : in byte;
+--			encoded : out std_logic;
+--			transmitting: out std_logic
+--		);
+--	end component;
 	
 	component timing_controller_waveform is
 		generic( 
@@ -329,30 +329,30 @@ architecture behavioral of main is
 		);
 	end component;
 	
-	component adc_controller is
-		port( 
-			clk : in std_logic;
-			ce : in std_logic;
-			reset : in std_logic;
-			adc_in : in std_logic_vector(7 downto 0);
-			adc_encode : out std_logic;
-			adc_value : out byte
-		);
-	end component;
+--	component adc_controller is
+--		port( 
+--			clk : in std_logic;
+--			ce : in std_logic;
+--			reset : in std_logic;
+--			adc_in : in std_logic_vector(7 downto 0);
+--			adc_encode : out std_logic;
+--			adc_value : out byte
+--		);
+--	end component;
 	
-	component pattern_detector is
-		port( 
-			clk : in std_logic;
-			reset : in std_logic;
-			ce : in std_logic;
-			pattern_in : in u8;
-			pattern_we: in std_logic;
-			pattern_sample_count : in unsigned(7 downto 0);
-			adc_in: in u8;
-			adc_we : in std_logic;
-			d_out : out unsigned(15 downto 0)
-		);
-	end component;
+--	component pattern_detector is
+--		port( 
+--			clk : in std_logic;
+--			reset : in std_logic;
+--			ce : in std_logic;
+--			pattern_in : in u8;
+--			pattern_we: in std_logic;
+--			pattern_sample_count : in unsigned(7 downto 0);
+--			adc_in: in u8;
+--			adc_we : in std_logic;
+--			d_out : out unsigned(15 downto 0)
+--		);
+--	end component;
 	
 	component trigger_generator is
 		port (
@@ -512,50 +512,50 @@ begin
 	register_file_readonly(11) <= ddr_dma_in(7 downto 0);
 	register_file_readonly(19) <= ddr_dma_in(15 downto 8);
 	
-	DDR_inst : memory_interface
-	port map(
-		clk => clk,
-		reset => reset, -- or ddr_control(3)
-		single_write => ddr_single_write,
-		single_write_w => register_file_w(57),
-		single_write_commit => ddr_control(0),
-		single_read	=> ddr_single_read,
-		single_read_r => register_file_r(17),
-		single_read_commit => ddr_control(1),
-		address => ddr_address,
-		address_w => register_file_w(58),
-		block_count => ddr_fifo_count,
-		block_count_w => register_file_w(59),
-		slave_fifo_start => ddr_control(2),
-		status => ddr_status,
-		mcb3_dram_dq     => mcb3_dram_dq,    
-		mcb3_dram_a      => mcb3_dram_a,     
-		mcb3_dram_ba     => mcb3_dram_ba,    
-		mcb3_dram_cke    => mcb3_dram_cke,   
-		mcb3_dram_ras_n  => mcb3_dram_ras_n, 
-		mcb3_dram_cas_n  => mcb3_dram_cas_n, 
-		mcb3_dram_we_n   => mcb3_dram_we_n, 
-		mcb3_dram_dm     => mcb3_dram_dm,    
-		mcb3_dram_udqs   => mcb3_dram_udqs,  
-		mcb3_rzq         => mcb3_rzq,        
-		mcb3_dram_udm    => mcb3_dram_udm,   
-		mcb3_dram_dqs    => mcb3_dram_dqs,   
-		mcb3_dram_ck     => mcb3_dram_ck,    
-		mcb3_dram_ck_n   => mcb3_dram_ck_n,  
-		dma_start        => ddr_dma_start,
-		dma_input        => ddr_dma_in,
-		IFCLK       => IFCLK,
-		FD          => FD,         
-		SLOE        => SLOE,      
-		SLRD        => SLRD,      
-		SLWR        => SLWR,      
-		FIFOADR0    => FIFOADR0,  
-		FIFOADR1    => FIFOADR1,  
-		PKTEND      => PKTEND,    
-		EMPTYFLAGC	=> EMPTYFLAGC,
-		FULLFLAGB 	=> FULLFLAGB,
-		FLAGA	    => FLAGA	  
-	);
+--	DDR_inst : memory_interface
+--	port map(
+--		clk => clk,
+--		reset => reset, -- or ddr_control(3)
+--		single_write => ddr_single_write,
+--		single_write_w => register_file_w(57),
+--		single_write_commit => ddr_control(0),
+--		single_read	=> ddr_single_read,
+--		single_read_r => register_file_r(17),
+--		single_read_commit => ddr_control(1),
+--		address => ddr_address,
+--		address_w => register_file_w(58),
+--		block_count => ddr_fifo_count,
+--		block_count_w => register_file_w(59),
+--		slave_fifo_start => ddr_control(2),
+--		status => ddr_status,
+--		mcb3_dram_dq     => mcb3_dram_dq,    
+--		mcb3_dram_a      => mcb3_dram_a,     
+--		mcb3_dram_ba     => mcb3_dram_ba,    
+--		mcb3_dram_cke    => mcb3_dram_cke,   
+--		mcb3_dram_ras_n  => mcb3_dram_ras_n, 
+--		mcb3_dram_cas_n  => mcb3_dram_cas_n, 
+--		mcb3_dram_we_n   => mcb3_dram_we_n, 
+--		mcb3_dram_dm     => mcb3_dram_dm,    
+--		mcb3_dram_udqs   => mcb3_dram_udqs,  
+--		mcb3_rzq         => mcb3_rzq,        
+--		mcb3_dram_udm    => mcb3_dram_udm,   
+--		mcb3_dram_dqs    => mcb3_dram_dqs,   
+--		mcb3_dram_ck     => mcb3_dram_ck,    
+--		mcb3_dram_ck_n   => mcb3_dram_ck_n,  
+--		dma_start        => ddr_dma_start,
+--		dma_input        => ddr_dma_in,
+--		IFCLK       => IFCLK,
+--		FD          => FD,         
+--		SLOE        => SLOE,      
+--		SLRD        => SLRD,      
+--		SLWR        => SLWR,      
+--		FIFOADR0    => FIFOADR0,  
+--		FIFOADR1    => FIFOADR1,  
+--		PKTEND      => PKTEND,    
+--		EMPTYFLAGC	=> EMPTYFLAGC,
+--		FULLFLAGB 	=> FULLFLAGB,
+--		FLAGA	    => FLAGA	  
+--	);
 	
 	ddr_dma_in <= "00000000" & std_logic_vector(adc_value) when ddr_control(6 downto 5) = "00" else
 		          std_logic_vector(detector_out) when ddr_control(6 downto 5) = "01" else
@@ -615,35 +615,35 @@ begin
 	-- pic_data_in_h  (r/w): 39 (32 + 7)
 	-- pic_data_out_l (r): 5
 	-- pic_data_out_h (r): 6
-	pic_control <= register_file_writable(4);
-	pic_data_in(5 downto 0) <=  register_file_writable_5(5 downto 0);--std_logic_vector(resize(unsigned(register_file_writable(5)), 6));
-	pic_data_in(13 downto 6) <= register_file_writable(6);
-	pic_data_in(21 downto 14) <= register_file_writable(7);
+--	pic_control <= register_file_writable(4);
+--	pic_data_in(5 downto 0) <=  register_file_writable_5(5 downto 0);--std_logic_vector(resize(unsigned(register_file_writable(5)), 6));
+--	pic_data_in(13 downto 6) <= register_file_writable(6);
+--	pic_data_in(21 downto 14) <= register_file_writable(7);
 	
-	register_file_readonly(5) <= pic_data_out(7 downto 0);
-	register_file_readonly(6) <= "00" & pic_data_out(13 downto 8);
+--	register_file_readonly(5) <= pic_data_out(7 downto 0);
+--	register_file_readonly(6) <= "00" & pic_data_out(13 downto 8);
 	
-	PIC_inst : pic_programmer 
-	generic map(
-		CLK_PERIOD => T_CLK
-	)
-	port map( 
-		clk => clk,
-		reset => reset,
-		data_in => pic_data_in,
-		has_data => pic_control(0),
-		get_response => pic_control(1),
-		send => pic_control(2),
-		prog_startstop => pic_control(3),
-		start_and_send => pic_control(4),
-		programming => pic_programming,
-		data_out => pic_data_out,
-		v_dd_en => pic_v_dd_en,
-		v_pp_en => pic_v_pp_en,
-		pgm => pic_pgm,
-		ispclk => pic_ispclk,
-		ispdat => pic_ispdat
-	);
+--	PIC_inst : pic_programmer 
+--	generic map(
+--		CLK_PERIOD => T_CLK
+--	)
+--	port map( 
+--		clk => clk,
+--		reset => reset,
+--		data_in => pic_data_in,
+--		has_data => pic_control(0),
+--		get_response => pic_control(1),
+--		send => pic_control(2),
+--		prog_startstop => pic_control(3),
+--		start_and_send => pic_control(4),
+--		programming => pic_programming,
+--		data_out => pic_data_out,
+--		v_dd_en => pic_v_dd_en,
+--		v_pp_en => pic_v_pp_en,
+--		pgm => pic_pgm,
+--		ispclk => pic_ispclk,
+--		ispdat => pic_ispdat
+--	);
 	
 	-- RFID
 	-- Register mapping:
@@ -667,27 +667,27 @@ begin
 	rfid_miller_status(0) <= rfid_miller_transmitting;
 	rfid_miller_status(7 downto 1) <= (others => '0');
 	
-	miller_encoder_inst : miller_encoder 
-	port map( 
-		clk => clk_fast,
-		reset => reset,
-		w_en => rfid_miller_w_en,
-		data => rfid_miller_data,
-		transmit => rfid_miller_transmit,
-		omit_count  => rfid_miller_omit_count,
-		encoded  => rfid_miller_encoded,
-		transmitting  => rfid_miller_transmitting
-	);
+--	miller_encoder_inst : miller_encoder 
+--	port map( 
+--		clk => clk_fast,
+--		reset => reset,
+--		w_en => rfid_miller_w_en,
+--		data => rfid_miller_data,
+--		transmit => rfid_miller_transmit,
+--		omit_count  => rfid_miller_omit_count,
+--		encoded  => rfid_miller_encoded,
+--		transmitting  => rfid_miller_transmitting
+--	);
 	
-	ask_modulator_inst : ask_modulator
-	port map( 
-		clk => clk_fast,
-		ce => '1',
-		reset => reset,
-		out_amplitude => rfid_ask_amplitude,
-		data => rfid_ask_data,
-		modulated => rfid_ask_modulated
-	);
+--	ask_modulator_inst : ask_modulator
+--	port map( 
+--		clk => clk_fast,
+--		ce => '1',
+--		reset => reset,
+--		out_amplitude => rfid_ask_amplitude,
+--		data => rfid_ask_data,
+--		modulated => rfid_ask_modulated
+--	);
 	
 	rfid_ask_amplitude <= register_file_writable(9) when fi_inject_fault = '0' else
 								 register_file_writable(8);
@@ -787,13 +787,13 @@ begin
 	fi_w_en    <= fi_control(0);
 	fi_arm     <= fi_control(1);
 	-- trigger if enabled in resp. control register
-	-- 0: PIC programmer trigger
+	-- 0: DAC enable (for powerup trigger)
 	-- 1: RFID trigger
 	-- 2: External trigger
 	-- 3: ADC trigger
 	-- 4: Smartcard data sent trigger 
 	-- 5: Smartcard data begin sending trigger
-	fi_trigger <= (pic_programming and fi_trigger_control(0)) or 
+	fi_trigger <= ((dac_control(0)) and fi_trigger_control(0)) or
 		(rfid_trigger and fi_trigger_control(1)) or 
 		(fi_trigger_ext and fi_trigger_control(2)) or
 		(sc_data_sent_trigger and fi_trigger_control(4)) or 
@@ -810,15 +810,15 @@ begin
 	-- ADC controller
 	adc_ce <= '1';
 		
-	ADC_CONTROLLER_inst : adc_controller 
-	port map(
-		clk => clk, 
-		reset => reset,
-		ce => adc_ce,
-		adc_in => adc_v_in,
-		adc_encode => adc_encode,
-		adc_value => adc_value
-	);
+--	ADC_CONTROLLER_inst : adc_controller 
+--	port map(
+--		clk => clk, 
+--		reset => reset,
+--		ce => adc_ce,
+--		adc_in => adc_v_in,
+--		adc_encode => adc_encode,
+--		adc_value => adc_value
+--	);
 	
 	-- Threshold trigger generator
 	-- thresh_status  (r): 12
@@ -873,18 +873,18 @@ begin
 	
 	detector_pattern_sample_count <= unsigned(register_file_writable_31(7 downto 0));
 	
-	PATTERN_DETECTOR_inst : pattern_detector
-	port map( 
-		clk => clk,
-		reset => reset,
-		ce => detector_ce,
-		pattern_in => u8(detector_pattern_in), 
-		pattern_we => register_file_w(60),
-		pattern_sample_count => detector_pattern_sample_count,
-		adc_in => u8(detector_adc_in),
-		adc_we => detector_adc_we,
-		d_out => detector_out
-	);
+--	PATTERN_DETECTOR_inst : pattern_detector
+--	port map( 
+--		clk => clk,
+--		reset => reset,
+--		ce => detector_ce,
+--		pattern_in => u8(detector_pattern_in), 
+--		pattern_we => register_file_w(60),
+--		pattern_sample_count => detector_pattern_sample_count,
+--		adc_in => u8(detector_adc_in),
+--		adc_we => detector_adc_we,
+--		d_out => detector_out
+--	);
 	
 	detector_ce <= '1';
 
