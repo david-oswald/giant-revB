@@ -45,6 +45,7 @@ class spartan6_fpga:
         if self.opened:
             self.dev.reset()
             usb.util.dispose_resources(self.dev)
+            self.opened = False
 
     def open(self):
         """Open USB connection"""
@@ -84,8 +85,8 @@ class spartan6_fpga:
         ''' 
         logging.debug("Resetting FPGA")
         cmd_buf = [Commands.FPGA_RESET.value]
-        self.send_raw_command(cmd_buf)
-        response = self.read_result()
+        self.sendRawCommand(cmd_buf)
+        response = self.readResult()
         if len(response) == 1 and response[0] == FPGA_Vars.FPGA_SUCCESS.value:
             return 0
         logging.error("Unexpected response: " + ' '.join([hex(b) for b in response]))
@@ -99,8 +100,8 @@ class spartan6_fpga:
         '''
         if reg >= FPGA_Vars.FPGA_REG_READ_BEGIN.value and reg < FPGA_Vars.FPGA_REG_READ_BEGIN.value + FPGA_Vars.FPGA_REG_READ_COUNT.value:
             cmd_buf = [Commands.FPGA_READ_REGISTER.value, reg]
-            self.send_raw_command(cmd_buf)
-            response = self.read_result()
+            self.sendRawCommand(cmd_buf)
+            response = self.readResult()
             if len(response) == 2 and response[0] == FPGA_Vars.FPGA_SUCCESS.value:
                 #logging.debug("Read register {} -> {}".format(reg, response[1]))
                 return response[1]
@@ -116,8 +117,8 @@ class spartan6_fpga:
         '''
         if reg >= FPGA_Vars.FPGA_REG_WRITE_BEGIN.value and reg < FPGA_Vars.FPGA_REG_WRITE_BEGIN.value + FPGA_Vars.FPGA_REG_WRITE_COUNT.value:
             cmd_buf = [Commands.FPGA_WRITE_REGISTER.value, reg, value]
-            self.send_raw_command(cmd_buf)
-            response = self.read_result()
+            self.sendRawCommand(cmd_buf)
+            response = self.readResult()
             if len(response) == 1 and response[0] == FPGA_Vars.FPGA_SUCCESS.value:
                 return 0
             logging.error("Unexpected response: " + ' '.join([hex(i) for i in response]))
@@ -220,7 +221,7 @@ class spartan6_fpga:
             return 0
         raise ValueError("setBitRegister(): bit %d out of range".format(bit))
 
-    def send_raw_command(self, frame, timeout = 1000):
+    def sendRawCommand(self, frame, timeout = 1000):
         '''  Helper to send raw command
 
         :param frame Raw binary data to send
@@ -238,7 +239,7 @@ class spartan6_fpga:
         
 
 
-    def read_result(self, n_bytes = 256, timeout = 1000):
+    def readResult(self, n_bytes = 256, timeout = 1000):
         '''Read response
         :param timeout Timeout in ms
         :return array of bytes read
@@ -252,7 +253,7 @@ class spartan6_fpga:
         else:
             raise Exception("USB device not connected")
 
-    def read_result_n(self, n, timeout = 200, max_reads = 200):
+    def readResult_n(self, n, timeout = 200, max_reads = 200):
         '''Read response with n bytes
             :param n Number of bytes expected
             :param timeout Timeout in ms (for a single read!)
@@ -263,7 +264,7 @@ class spartan6_fpga:
         read_bytes = []
         while len(read_bytes) < n and (attempts < max_reads or max_reads < 0):
             try:
-                read_bytes = read_bytes + self.read_result(n, timeout)
+                read_bytes = read_bytes + self.readResult(n, timeout)
 
             except IOError as err:
                 pass

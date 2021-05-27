@@ -102,16 +102,17 @@ class glitcher:
         self.dac.setTestModeEnabled(0)
         self.dac.setRfidModeEnabled(0)
 
-
+        # Set the fault voltage, normal voltage, off voltage
         self.set_voltages(0, 3.3, 0)
 
+        # Clean up any previous pulses
         self.dac.clearPulses()
 
         # Set a pulse
         self.add_pulse(100, 5)
         self.add_pulse(10, 5)
 
-        # Arm the DAC
+        # Arm the fault
         self.dac.arm()
 
         # Generate a software trigger
@@ -131,7 +132,7 @@ class glitcher:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level = logging.DEBUG)
+    logging.basicConfig(level = logging.INFO)
     glitcher = glitcher()
     glitcher.test_fi()
     glitcher.close()

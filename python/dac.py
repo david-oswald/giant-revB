@@ -200,7 +200,7 @@ class dac:
 
         fpga.setBitRegister(Registers.DAC_CONTROL.value, Register_Bits.DAC_RFID_MODE.value, on)
 
-    def setUtxModeEnabled(on):
+    def setUtxModeEnabled(self, on):
         ''' Control UTX mode of DAC 
         In this mode, DAC will be switched to off by zero from UTX and left at normal voltage otherwise. Useful e.g. for driving tristate busses + pulse
         :param on True to enable UTX mode, otherwise false
