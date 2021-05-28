@@ -87,13 +87,8 @@ architecture behavioral of dac_controller is
    signal off_prev, voltage_select_prev, ce_of : std_logic;
 begin
 	-- assignments
-	
-	-- NOTE: could be necessary to buffer with BUFG
-	-- clk_dac <= clk;
 	voltage_out <= std_logic_vector(voltage_i);
-	
 	clk_inv <= not clk;
-	
 	
 	ODDR2_inst : ODDR2
    generic map(
@@ -117,8 +112,8 @@ begin
 		if rising_edge(clk) then
 			if(reset = '1') then
 				sleep <= '0';
-				--clk_dac_i <= '0';
-				voltage_i <= (others => '0');
+				-- Reset voltage to mid point so that output is yero
+				voltage_i <= "10000000";
 				voltage_select_prev <= '0';
 				ce_of <= '0';
 				off_prev <= '0';
@@ -131,7 +126,6 @@ begin
 					voltage_i <= unsigned(voltage_off);
 				elsif test_mode = '1' then
 					voltage_i <= voltage_i + 1;
-					--voltage_i <= not voltage_i;
 				elsif voltage_select = '1' then
 					voltage_i <= unsigned(voltage_high);
 				else
