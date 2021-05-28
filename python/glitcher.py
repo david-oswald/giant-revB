@@ -62,16 +62,14 @@ class glitcher:
         self.dac.setFaultVoltage(v_fault)
 
     def add_pulse(self, offset, width, overwrite = 0):
-        '''Sets the width and offset of a pulse - given in microseconds
+        '''Sets the width and offset of a pulse - given in nanosecond
         
-        :param width: width of the pulse (in microseconds)
-        :param offset: offset from the trigger (in microseconds)
+        :param width: width of the pulse (in nanosecond)
+        :param offset: offset from the trigger (in nanosecond)
         '''
-        # For some reason the width and offset are off by 1.32, so convert them from microseconds
-        w = width/1.33
-        o = offset/1.33
+
         # Set a pulse
-        self.dac.addPulse(o, w, overwrite)
+        self.dac.addPulse(offset, width, overwrite)
 
     def close(self):
         return self.fpga.close()
@@ -103,23 +101,29 @@ class glitcher:
         self.dac.setTestModeEnabled(0)
         self.dac.setRfidModeEnabled(0)
 
+        # Setup trigger
+        self.dac.setTriggerEnableState(Register_Bits.FI_TRIGGER_CONTROL_DAC_POWER.value, True)
+
         # Set the fault voltage, normal voltage, off voltage
         self.set_voltages(0, 3.3, 0)
-        
-
 
         # Clean up any previous pulses
         self.dac.clearPulses()
 
         # Set a pulse
-        self.add_pulse(100, 5)
-        self.add_pulse(10, 5)
+        self.add_pulse(200000, 50)
+        self.add_pulse(1000, 50)
 
+        
+        # Disable DAC 
+        self.dac.setEnabled(False)
+        
         # Arm the fault
         self.dac.arm()
 
-        # Generate a software trigger
-        self.dac.softwareTrigger()  
+        # This should trigger - needs fixed bitstream
+        self.dac.setEnabled(True)
+
 
     def clear_pulses(self):
         '''Clears all pulses in the dac'''

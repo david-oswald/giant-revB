@@ -16,7 +16,7 @@ class spartan6_fpga:
     @staticmethod
     def getInstance():
         if spartan6_fpga.__instance is None:
-            spartan6_fpga(0x100e6)
+            spartan6_fpga(100e6)
         return spartan6_fpga.__instance
 
 
@@ -33,7 +33,7 @@ class spartan6_fpga:
         return self.f_clk
 	
     def getNsToPoint(self): 
-        return self.f_clk/0x1e9
+        return self.f_clk/1e9
 
     def __del__(self):
         """Release the USB connection"""

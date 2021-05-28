@@ -5,6 +5,7 @@ import serial as ser
 import uu
 from glitcher import glitcher
 import logging
+from fpga import Registers, Register_Bits
 
 PROTECTED = "prot"
 UNPROTECTED = "unprot"
@@ -19,7 +20,7 @@ def expect_read(serial, expected):
     result = ""
     # Don't attempt to read more than 1 times
     for i in range(0, 1):
-        result += serial.read(len(expected)).decode('UTF-8')
+        result += serial.read(len(expected)).decode('ascii', 'ignore')
         if expected in result:
             return None;
 
@@ -33,17 +34,17 @@ def read_address(serial, address, length):
     result = ""
     # Don't attempt to read more than 1 times
     for i in range(0, 1):
-        result += serial.read(61).decode('UTF-8')
+        result += serial.read(61).decode('ascii', 'ignore')
         if '\r\n' in result:
             break
     
     # Check if command succeeded.
-    if '\r0' in result:
+    if '\r0\r\n' in result and not('\r09' in result):
         serial.write(b'OK\r\n')
         expect_read(serial, 'OK\r\n')
         return result
     
-    # print(result)
+    print(repr(result), end = " - ")
 
     return None
 
@@ -95,8 +96,8 @@ def check_protected(serial, khz, debugPrint):
     if r is None:
         return PROTECTED
     else:
-        print("Yeah, unprotected")
-        print(r)
+        print("!!! Yeah, unprotected !!!")
+        print(repr(r))
         return UNPROTECTED
         
     return (r == None)
@@ -109,45 +110,92 @@ if __name__=="__main__":
     
     logging.basicConfig(level = logging.INFO)
     
+    ## FIXME: Glitcher currently has different options than bitstream
+    ##        because bitstream is based on outdated files
+    
     glitcher = glitcher()
     glitcher.reset_fpga() 
-    
-    # Set the fault voltage, normal voltage, off voltage
-    glitcher.set_voltages(0.6, 1.7, 0)
-    
     glitcher.dac.setTestModeEnabled(0)
     glitcher.dac.setRfidModeEnabled(0)
-
-   
     
-    # Clean up any previous pulses
-    glitcher.dac.clearPulses()
+    # Setup trigger
+    glitcher.dac.setTriggerEnableState(Register_Bits.FI_TRIGGER_CONTROL_DAC_POWER.value, True)
 
-    # Set a pulse
-    glitcher.add_pulse(100000, 5000)
+    # Set the fault voltage, normal voltage, off voltage
+    glitcher.set_voltages(0.5, 1.75, 0)
     
-    # Reset uc
-    glitcher.dac.setEnabled(False)
-    time.sleep(.1)
-    glitcher.dac.setEnabled(True)
-
-    # Arm the fault
-    glitcher.dac.arm()
-
-    # Generate a software trigger
-    glitcher.dac.softwareTrigger()  
+    # Limits
+    offset_start = 53400
+    #offset_end = 54000
+    offset_end = 64000
+    offset_step = 50
     
-    status = check_protected(port, 12000, False);
-    #status = False
+    w_start = 90
+    w_end = 250
+    w_step = 10
     
-    if status == False:
-        print("Communication failed, restarting")
-    elif status == PROTECTED:
-        print("Protected, next param")
-    elif status == UNPROTECTED:
-        print("WOOT!")
-    else:
-        print("Invalid return value!")
+    v_start = 0.2
+    v_end = 0.7
+    v_step = 0.1
+    
+    repeat = 1
+    
+    
+    # Loop state
+    run = True
+    w = w_start
+    offset = offset_start
+    v = v_start
+    r = 0
+    
+    glitcher.set_voltages(v, 1.75, 0)
+    
+    while run:
+        # Clean up any previous pulses
+        glitcher.dac.clearPulses()
+    
+        # Set a pulse
+        glitcher.add_pulse(offset, w)
+        
+        # Arm the fault
+        glitcher.dac.arm()
+        
+        # Reset uc - this will also trigger the glitch
+        glitcher.dac.setEnabled(False)
+        time.sleep(.02)
+        glitcher.dac.setEnabled(True)
+        
+        status = check_protected(port, 12000, False);
+        
+        if status == False:
+            print("Communication failed, restarting")
+        elif status == PROTECTED:
+            print("Protected, next param")
+            print("v = {:f}, w = {:d}, o = {:d}, repeat = {:d}".format(v, w, offset, r))
+            
+            # Next param
+            if r < repeat:
+                r = r + 1
+            elif w < w_end:
+                r = 0
+                w = w + w_step
+            elif offset < offset_end:
+                w = w_start
+                offset = offset + offset_step
+            elif v < v_end:
+                offset = offset_start
+                w = w_start
+                v = v + v_step
+                glitcher.set_voltages(v, 1.75, 0)
+            else:
+                run = False
+            
+        elif status == UNPROTECTED:
+            print("WOOT!")
+            print("v = {:f}, w = {:d}, o = {:d}".format(v, w, offset))
+            run = False
+        else:
+            print("Invalid return value!")
     
     close_port(port)
     glitcher.close()

@@ -234,7 +234,7 @@ class Register_Bits(Enum):
     SV_CONTROL_GPIO6 = 6
 
     # FI trigger control register bits
-    FI_TRIGGER_CONTROL_PIC = 0
+    FI_TRIGGER_CONTROL_DAC_POWER = 0
     FI_TRIGGER_CONTROL_RFID = 1
     FI_TRIGGER_CONTROL_EXT1 = 2
     FI_TRIGGER_CONTROL_ADC = 3
