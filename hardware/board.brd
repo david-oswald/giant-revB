@@ -2463,16 +2463,16 @@ Based on the following sources:
 <contactref element="GPIO" pad="3"/>
 <wire x1="22.65" y1="96" x2="22.65" y2="92.025" width="0.254" layer="16"/>
 <wire x1="22.65" y1="92.025" x2="25.32" y2="89.355" width="0.254" layer="16"/>
-<contactref element="CON2" pad="D3"/>
-<wire x1="-15.38" y1="-24.17" x2="25.32" y2="89.355" width="0" layer="19" extent="1-1"/>
+<contactref element="CON2" pad="C6"/>
+<wire x1="-7.76" y1="-26.71" x2="25.32" y2="89.355" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GPIO1">
 <contactref element="CON1" pad="D9"/>
 <contactref element="GPIO" pad="4"/>
 <wire x1="25.19" y1="96" x2="25.19" y2="92.025" width="0.254" layer="16"/>
 <wire x1="25.19" y1="92.025" x2="27.86" y2="89.355" width="0.254" layer="16"/>
-<contactref element="CON2" pad="D4"/>
-<wire x1="-12.84" y1="-24.17" x2="27.86" y2="89.355" width="0" layer="19" extent="1-1"/>
+<contactref element="CON2" pad="D6"/>
+<wire x1="-7.76" y1="-24.17" x2="27.86" y2="89.355" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GPIO2">
 <contactref element="CON1" pad="D10"/>
@@ -2483,8 +2483,8 @@ Based on the following sources:
 <wire x1="29.1" y1="89.9" x2="29.6" y2="89.4" width="0.254" layer="16"/>
 <wire x1="29.6" y1="89.4" x2="30.355" y2="89.4" width="0.254" layer="16"/>
 <wire x1="30.355" y1="89.4" x2="30.4" y2="89.355" width="0.254" layer="16"/>
-<contactref element="CON2" pad="D5"/>
-<wire x1="-10.3" y1="-24.17" x2="29.6" y2="89.4" width="0" layer="19" extent="16-16"/>
+<contactref element="CON2" pad="C7"/>
+<wire x1="-5.22" y1="-26.71" x2="29.6" y2="89.4" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="V+">
 <contactref element="D2" pad="A"/>
@@ -2521,8 +2521,8 @@ Based on the following sources:
 <wire x1="48" y1="71" x2="53" y2="71" width="0.4064" layer="16"/>
 <wire x1="53" y1="71" x2="61" y2="79" width="0.4064" layer="16"/>
 <wire x1="61" y1="79" x2="83" y2="79" width="0.4064" layer="16"/>
-<contactref element="CON2" pad="A5"/>
-<wire x1="-10.3" y1="-58.46" x2="27.86" y2="44.905" width="0" layer="19" extent="1-1"/>
+<contactref element="CON2" pad="A7"/>
+<wire x1="-5.22" y1="-58.46" x2="27.86" y2="44.905" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="IO">
 <contactref element="CON1" pad="B9"/>
@@ -2535,8 +2535,8 @@ Based on the following sources:
 <wire x1="51.4" y1="67.6" x2="50" y2="69" width="0.4064" layer="1"/>
 <via x="50" y="69" extent="1-16" drill="0.6" shape="octagon"/>
 <wire x1="50" y1="69" x2="49.415" y2="69" width="0.4064" layer="16"/>
-<contactref element="CON2" pad="B5"/>
-<wire x1="-10.3" y1="-55.92" x2="27.86" y2="47.445" width="0" layer="19" extent="1-1"/>
+<contactref element="CON2" pad="A9"/>
+<wire x1="-0.14" y1="-58.46" x2="27.86" y2="47.445" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="PIN6">
 <contactref element="CON1" pad="A12"/>
@@ -2687,6 +2687,8 @@ Based on the following sources:
 <wire x1="9.35" y1="32.35" x2="15" y2="38" width="0.3048" layer="16"/>
 <wire x1="32" y1="38" x2="34.2" y2="40.2" width="0.3048" layer="16"/>
 <wire x1="15" y1="38" x2="32" y2="38" width="0.3048" layer="16"/>
+<contactref element="CON2" pad="B12"/>
+<wire x1="9.35" y1="32.35" x2="7.48" y2="-55.92" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="GPIO2_1">
 <contactref element="CON1" pad="A18"/>
@@ -2707,6 +2709,8 @@ Based on the following sources:
 <wire x1="38.2" y1="40" x2="39" y2="40" width="0.3048" layer="16"/>
 <wire x1="39" y1="40" x2="40" y2="41" width="0.3048" layer="16"/>
 <wire x1="40" y1="41" x2="49" y2="41" width="0.3048" layer="16"/>
+<contactref element="CON2" pad="A13"/>
+<wire x1="9" y1="30" x2="10.02" y2="-58.46" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="GPIO2_2">
 <contactref element="CON1" pad="B18"/>
@@ -2722,6 +2726,8 @@ Based on the following sources:
 <wire x1="8.27" y1="27.27" x2="17" y2="36" width="0.3048" layer="16"/>
 <wire x1="17" y1="36" x2="35" y2="36" width="0.3048" layer="16"/>
 <wire x1="35" y1="36" x2="36" y2="37" width="0.3048" layer="16"/>
+<contactref element="CON2" pad="B13"/>
+<wire x1="8.27" y1="27.27" x2="10.02" y2="-55.92" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="GPIO2_3">
 <contactref element="CON1" pad="A19"/>
@@ -2734,6 +2740,8 @@ Based on the following sources:
 <wire x1="18" y1="35" x2="36" y2="35" width="0.3048" layer="16"/>
 <wire x1="36" y1="35" x2="41" y2="40" width="0.3048" layer="16"/>
 <wire x1="41" y1="40" x2="51" y2="40" width="0.3048" layer="16"/>
+<contactref element="CON2" pad="B14"/>
+<wire x1="7.73" y1="24.73" x2="12.56" y2="-55.92" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="GPIO2_4">
 <contactref element="CON1" pad="A20"/>
@@ -2748,6 +2756,8 @@ Based on the following sources:
 <wire x1="19" y1="34" x2="7" y2="22" width="0.3048" layer="16"/>
 <wire x1="7" y1="22" x2="4.19" y2="22" width="0.3048" layer="16"/>
 <wire x1="4.19" y1="22" x2="4" y2="22.19" width="0.3048" layer="16"/>
+<contactref element="CON2" pad="A19"/>
+<wire x1="7" y1="22" x2="25.26" y2="-58.46" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="GPIO2_5">
 <contactref element="CON1" pad="B20"/>
@@ -2761,6 +2771,8 @@ Based on the following sources:
 <wire x1="55.8" y1="47.445" x2="55.8" y2="47.3" width="0.3048" layer="16"/>
 <wire x1="55.8" y1="47.3" x2="57.1" y2="46" width="0.3048" layer="16"/>
 <wire x1="57.1" y1="46" x2="57.1" y2="41.1" width="0.3048" layer="16"/>
+<contactref element="CON2" pad="B19"/>
+<wire x1="6.65" y1="19.65" x2="25.26" y2="-55.92" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="GPIO2_6">
 <contactref element="CON1" pad="B27"/>
@@ -2779,6 +2791,8 @@ Based on the following sources:
 <wire x1="73.58" y1="48.42" x2="73" y2="49" width="0.3048" layer="1"/>
 <wire x1="73" y1="49" x2="59.8" y2="49" width="0.3048" layer="1"/>
 <wire x1="59.8" y1="49" x2="59.6" y2="48.8" width="0.3048" layer="1"/>
+<contactref element="CON2" pad="A20"/>
+<wire x1="6.11" y1="17.11" x2="27.8" y2="-58.46" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="GPIO2_7">
 <contactref element="CON1" pad="A28"/>
@@ -2799,18 +2813,20 @@ Based on the following sources:
 <wire x1="57" y1="41" x2="54" y2="38" width="0.3048" layer="1"/>
 <wire x1="54" y1="38" x2="54" y2="36" width="0.3048" layer="1"/>
 <via x="54" y="36" extent="1-16" drill="0.6" shape="octagon"/>
+<contactref element="CON2" pad="B20"/>
+<wire x1="5.57" y1="14.57" x2="27.8" y2="-55.92" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="VCCIO">
-<contactref element="CON1" pad="A7"/>
 <contactref element="GPIO2" pad="1"/>
 <contactref element="C19" pad="1"/>
-<wire x1="22.78" y1="44.905" x2="22.78" y2="44.78" width="1.016" layer="16"/>
 <wire x1="22.78" y1="44.78" x2="19" y2="41" width="1.016" layer="16"/>
 <wire x1="4" y1="37.43" x2="8" y2="37.43" width="1.016" layer="16"/>
 <wire x1="8" y1="37.43" x2="9.43" y2="37.43" width="1.016" layer="16"/>
 <wire x1="9.43" y1="37.43" x2="13" y2="41" width="1.016" layer="16"/>
 <wire x1="13" y1="41" x2="19" y2="41" width="1.016" layer="16"/>
 <wire x1="8" y1="37" x2="8" y2="37.43" width="1.016" layer="16"/>
+<contactref element="CON1" pad="A7"/>
+<wire x1="22.78" y1="44.78" x2="22.78" y2="44.905" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="N$69">
 <contactref element="CON1" pad="C20"/>
