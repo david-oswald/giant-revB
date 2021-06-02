@@ -1195,11 +1195,15 @@ begin
 	-- 3: ADC trigger
 	-- 4: Smartcard data sent trigger 
 	-- 5: Smartcard data begin sending trigger
-	fi_trigger <= ((dac_control(0)) and fi_trigger_control(0)) or
+	-- 6: Utiming output
+	-- 7: Invert trigger edge direction
+	fi_trigger <= (((dac_control(0) and fi_trigger_control(0)) or
 		(rfid_trigger and fi_trigger_control(1)) or 
 		(fi_trigger_ext and fi_trigger_control(2)) or
+		-- ADC trigger currently missing
 		(sc_data_sent_trigger and fi_trigger_control(4)) or 
 		(sc_data_sending_trigger and fi_trigger_control(5)) or
+		(utiming_out and fi_trigger_control(6))) xor fi_trigger_control(7)) or
 		fi_control(2); -- this is the software trigger, always enabled
 	
 	-- status register
@@ -1393,7 +1397,7 @@ begin
 	led(0) <= clk_locked;
 	led(1) <= thresh_armed;
 	led(2) <= fi_trigger;
-	led(3) <= sc_sw2;
+	led(3) <= utiming_out;
 	
 	
 	-- GPIO
@@ -1465,6 +1469,11 @@ begin
 	gpio_fpga_o(11) <= pic_ispdat;
 	gpio_fpga_io_output(11) <= pic_ispdat_output;
 	
+	-- Utiming
+	gpio_fpga_o(12) <= utiming_out;
+	gpio_fpga_io_output(12) <= '1';
+	
+	-- Standard values
 	gpio_fpga_o(29) <= '0';
 	gpio_fpga_io_output(29) <= '1';
 	
@@ -1474,9 +1483,11 @@ begin
 	gpio_fpga_o(31) <= 'Z';
 	gpio_fpga_io_output(31) <= '0';
 	
+	-- Reset of pins
 	gpio_fpga_o(28 downto 13) <= (others => '0');
 	gpio_fpga_io_output(28 downto 13) <= (others => '0');
-	-- processes
+	
+	-- Processes
 	
 	
 end behavioral;

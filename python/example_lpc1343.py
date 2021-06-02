@@ -113,6 +113,8 @@ if __name__=="__main__":
     ## FIXME: Glitcher currently has different options than bitstream
     ##        because bitstream is based on outdated files
     
+    ## FIXME: better use reset pin here instead of power down
+    
     glitcher = glitcher()
     glitcher.reset_fpga() 
     glitcher.dac.setTestModeEnabled(0)
@@ -125,18 +127,18 @@ if __name__=="__main__":
     glitcher.set_voltages(0.5, 1.75, 0)
     
     # Limits
-    offset_start = 53400
+    offset_start = 50000
     #offset_end = 54000
-    offset_end = 64000
-    offset_step = 50
+    offset_end = 150000
+    offset_step = 100
     
-    w_start = 90
-    w_end = 250
+    w_start = 80
+    w_end = 270
     w_step = 10
     
-    v_start = 0.2
-    v_end = 0.7
-    v_step = 0.1
+    v_start = 0.4
+    v_end = 0.8
+    v_step = 0.2
     
     repeat = 1
     

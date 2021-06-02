@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version 14.2
-# Date: Tue Oct 16 19:18:52 2012
+# Xilinx Core Generator version 14.7
+# Date: Wed Jun  2 10:36:15 2021
 #
 ##############################################################
 #
@@ -12,7 +12,7 @@
 #
 ##############################################################
 #
-#  Generated from component: xilinx.com:ip:clk_wiz:3.2
+#  Generated from component: xilinx.com:ip:clk_wiz:3.6
 #
 ##############################################################
 #
@@ -22,7 +22,7 @@ SET asysymbol = true
 SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = false
 SET designentry = VHDL
-SET device = xc6slx25
+SET device = xc6slx16
 SET devicefamily = spartan6
 SET flowvendor = Other
 SET formalverification = false
@@ -36,7 +36,7 @@ SET verilogsim = false
 SET vhdlsim = true
 # END Project Options
 # BEGIN Select
-SELECT Clocking_Wizard xilinx.com:ip:clk_wiz:3.2
+SELECT Clocking_Wizard xilinx.com:ip:clk_wiz:3.6
 # END Select
 # BEGIN Parameters
 CSET calc_done=DONE
@@ -77,7 +77,7 @@ CSET clkout2_requested_duty_cycle=50.000
 CSET clkout2_requested_out_freq=50.000
 CSET clkout2_requested_phase=0.000
 CSET clkout2_used=true
-CSET clkout3_drives=No_buffer
+CSET clkout3_drives=BUFG
 CSET clkout3_requested_duty_cycle=50.000
 CSET clkout3_requested_out_freq=48
 CSET clkout3_requested_phase=0.000
@@ -107,15 +107,15 @@ CSET component_name=clock_generator
 CSET daddr_port=DADDR
 CSET dclk_port=DCLK
 CSET dcm_clk_feedback=1X
-CSET dcm_clk_out1_port=CLKFX
+CSET dcm_clk_out1_port=CLK0
 CSET dcm_clk_out2_port=CLK0
 CSET dcm_clk_out3_port=CLK0
 CSET dcm_clk_out4_port=CLK0
 CSET dcm_clk_out5_port=CLK0
 CSET dcm_clk_out6_port=CLK0
 CSET dcm_clkdv_divide=2.0
-CSET dcm_clkfx_divide=12
-CSET dcm_clkfx_multiply=25
+CSET dcm_clkfx_divide=1
+CSET dcm_clkfx_multiply=4
 CSET dcm_clkgen_clk_out1_port=CLKFX
 CSET dcm_clkgen_clk_out2_port=CLKFX
 CSET dcm_clkgen_clk_out3_port=CLKFX
@@ -239,6 +239,8 @@ CSET secondary_in_freq=100.000
 CSET secondary_in_jitter=0.010
 CSET secondary_port=CLK_IN2
 CSET secondary_source=Single_ended_clock_capable_pin
+CSET ss_mod_freq=250
+CSET ss_mode=CENTER_HIGH
 CSET status_port=STATUS
 CSET summary_strings=empty
 CSET use_clk_valid=false
@@ -257,10 +259,11 @@ CSET use_phase_alignment=true
 CSET use_power_down=false
 CSET use_reset=true
 CSET use_spread_spectrum=false
+CSET use_spread_spectrum_1=false
 CSET use_status=false
 # END Parameters
 # BEGIN Extra information
-MISC pkg_timestamp=2011-03-09T16:42:33Z
+MISC pkg_timestamp=2012-05-10T12:44:55Z
 # END Extra information
 GENERATE
-# CRC: 6f002912
+# CRC: c03fde69

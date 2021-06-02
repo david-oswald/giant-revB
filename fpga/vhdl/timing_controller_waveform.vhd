@@ -171,21 +171,6 @@ begin
 
 	-- processes
 	
-	-- counter
---	COUNTER : process(clk) 
---	begin
---		if rising_edge(clk) then
---			if reset = '1' then
---				count <= (others => '0');
---			elsif ce = '1' then
---				if count_reset = '1' then
---					count <= ZERO;
---				else
---					count <= count+1;
---				end if;
---			end if;
---		end if;
---	end process;
 	
 	-- FSM synchronization and buffered signals
 	SYNC : process(clk) 
