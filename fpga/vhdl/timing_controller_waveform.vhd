@@ -55,6 +55,7 @@ entity timing_controller_waveform is
 		
 		-- inputs
 		arm : in std_logic;
+		disarm : in std_logic;
 		trigger : in std_logic;
 		
 		-- status outputs
@@ -111,17 +112,18 @@ architecture behavioral of timing_controller_waveform is
 	end component;
 
 	-- Synplicity black box declaration
-	attribute syn_black_box : boolean;
-	attribute syn_black_box of waveform_ram: component is true;
+	--attribute syn_black_box : boolean;
+	--attribute syn_black_box of waveform_ram: component is true;
 	
 	-- signals
 	
-	signal arm_prev, trigger_prev : std_logic;
+	signal arm_prev, trigger_prev, disarm_prev : std_logic;
 	-- FSM state
 	signal state, next_state : state_type;
 	
 	-- Target for R/W operations
 	signal a_reg : std_logic_vector(7 downto 0);
+	--signal a_reg_next : std_logic_vector(7 downto 0);
 	signal in_data, out_data : std_logic_vector(31 downto 0);
 	signal w_en_a : std_logic;
 	
@@ -129,7 +131,7 @@ architecture behavioral of timing_controller_waveform is
 	signal instr_pointer, instr_pointer_next, instr_count, instr_count_next : unsigned(7 downto 0);
 	
 	-- FSM counter
-	signal count : unsigned(TIME_REGISTER_WIDTH-1 downto 0);
+	signal count, count_next : unsigned(TIME_REGISTER_WIDTH-1 downto 0);
 	signal count_reset : std_logic;
 	
 	-- Configuration registers
@@ -170,20 +172,20 @@ begin
 	-- processes
 	
 	-- counter
-	COUNTER : process(clk) 
-	begin
-		if rising_edge(clk) then
-			if reset = '1' then
-				count <= (others => '0');
-			elsif ce = '1' then
-				if count_reset = '1' then
-					count <= ZERO;
-				else
-					count <= count+1;
-				end if;
-			end if;
-		end if;
-	end process;
+--	COUNTER : process(clk) 
+--	begin
+--		if rising_edge(clk) then
+--			if reset = '1' then
+--				count <= (others => '0');
+--			elsif ce = '1' then
+--				if count_reset = '1' then
+--					count <= ZERO;
+--				else
+--					count <= count+1;
+--				end if;
+--			end if;
+--		end if;
+--	end process;
 	
 	-- FSM synchronization and buffered signals
 	SYNC : process(clk) 
@@ -198,6 +200,9 @@ begin
 				instr_count <= (others => '0');
 				trigger_prev <= trigger;
 				arm_prev <= arm;
+				disarm_prev <= disarm;
+				count <= (others => '0');
+				--a_reg <= (others => '0');
 			elsif ce = '1' then
 				state <= next_state;
 				pulse_delay_i <= pulse_delay_i_next;
@@ -207,13 +212,17 @@ begin
 				instr_count <= instr_count_next;
 				trigger_prev <= trigger;
 				arm_prev <= arm;
+				disarm_prev <= disarm;
+				count <= count_next;
+				--a_reg <= a_reg_next;
 			end if;
 		end if;
 	end process;
 	
 	-- FSM next state decoding
 	NEXT_STATE_DECODE : process(state, arm, trigger, count, pulse_delay_i, pulse_length_i, polarity_i, 
-		a_reg, in_data, instr_pointer, instr_count, out_data, arm_prev, trigger_prev)
+		a_reg, in_data, instr_pointer, instr_count, out_data, arm_prev, trigger_prev, count,
+		disarm, disarm_prev)
 	begin
 		-- default is to stay in current state
 		next_state <= state;
@@ -224,20 +233,22 @@ begin
 		polarity_i_next <= polarity_i;
 		ready <= '1';
 		armed <= '0';
+		count_next <= count;
 		
 		inject_fault <= polarity_i;
 		count_reset <= '0';
 		instr_pointer_next <= instr_pointer;
 		instr_count_next <= instr_count;
+		--a_reg_next <= a_reg;
 		a_reg <= (others => '0');
 
 		case state is
 			when IDLE =>
-				count_reset <= '1';
-			    
+				--count_reset <= '1';
+				-- load config register
+			    a_reg <= (others => '0');
+				 
 			    if (arm = '1' and arm_prev = '0') then
-					-- load config register
-					a_reg <= (others => '0');
 					-- prepare instruction pointer
 					instr_pointer_next <= to_unsigned(3, instr_pointer'length);
 					
@@ -253,6 +264,11 @@ begin
 				
 				ready <= '0';
 				next_state <= ARMING_LOAD_DELAY;
+				
+				if disarm = '1' and disarm_prev = '0' then
+					next_state <= IDLE;
+				end if;
+				
 			when ARMING_LOAD_DELAY =>
 				-- store delay register values
 				pulse_delay_i_next <= unsigned(out_data);
@@ -262,10 +278,18 @@ begin
 				
 				ready <= '0';
 				next_state <= ARM_DONE;
+				
+				if disarm = '1' and disarm_prev = '0' then
+					next_state <= IDLE;
+				end if;
+				
 			when ARM_DONE =>
 			    -- check for trigger becoming valid
-				if (trigger = '1' and trigger_prev = '0') then
+				if disarm = '1' and disarm_prev = '0' then
+					next_state <= IDLE;
+				elsif (trigger = '1' and trigger_prev = '0') then
 					next_state <= TRIGGERED;
+					count_next <= (others => '0');
 				end if;
 				
 				-- fetch width value
@@ -278,10 +302,14 @@ begin
 				ready <= '0';
 			when TRIGGERED =>	
                 -- wait until pulse delay reached	
-				if count = pulse_delay_i then
+				if disarm = '1' and disarm_prev = '0' then
+					next_state <= IDLE;
+				elsif count = pulse_delay_i then
 					next_state <= INJECTED;
+					count_next <= (others => '0');
 				else
 					next_state <= TRIGGERED_COUNTING;
+					count_next <= count + 1;
 				end if;
 
 				count_reset <= '1';
@@ -296,11 +324,17 @@ begin
 				
 			when TRIGGERED_COUNTING =>
 			    -- wait until pulse delay reached
-                if count = pulse_delay_i then
+					if disarm = '1' and disarm_prev = '0' then
+						next_state <= IDLE;
+					elsif count = pulse_delay_i then
                     next_state <= INJECTED;
-                
+						
                     -- set next pulse delay value
                     pulse_delay_i_next <= unsigned(out_data);
+						  
+						  count_next <= (others => '0');
+					 else
+						count_next <= count + 1;
                 end if; 
 				
 				
@@ -309,18 +343,29 @@ begin
 			when INJECTED =>
 				next_state <= INJECTED_COUNTING;
 				ready <= '0';
-				count_reset <= '1';
+				
+				if disarm = '1' and disarm_prev = '0' then
+					next_state <= IDLE;
+				end if;
+				
+				--count_reset <= '1';
 				
 				instr_pointer_next <= instr_pointer + to_unsigned(1, instr_pointer'length);
 				a_reg <= std_logic_vector(instr_pointer + to_unsigned(1, instr_pointer'length));	
 			when INJECTED_COUNTING =>
-				if count = pulse_length_i then
+				if disarm = '1' and disarm_prev = '0' then
+					next_state <= IDLE;
+				elsif count = pulse_length_i then
 					-- check if at end of instruction memory
 					if instr_pointer - to_unsigned(0, instr_pointer'length) > instr_count then
 						next_state <= IDLE;
 					else
 						next_state <= TRIGGERED;
-					end if;	
+					end if;
+					
+					count_next <= (others => '0');
+				else
+					count_next <= count + 1;
 				end if;	
 
 				a_reg <= std_logic_vector(instr_pointer);

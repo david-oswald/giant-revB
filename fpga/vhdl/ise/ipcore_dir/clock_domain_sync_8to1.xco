@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version 14.7
-# Date: Fri Jul  6 12:09:38 2018
+# Xilinx Core Generator version 14.2
+# Date: Tue Oct 16 19:15:16 2012
 #
 ##############################################################
 #
@@ -22,7 +22,7 @@ SET asysymbol = true
 SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = false
 SET designentry = VHDL
-SET device = xc6slx16
+SET device = xc6slx25
 SET devicefamily = spartan6
 SET flowvendor = Other
 SET formalverification = false
@@ -214,4 +214,4 @@ CSET wuser_width=1
 MISC pkg_timestamp=2011-03-14T07:12:32Z
 # END Extra information
 GENERATE
-# CRC:   78609b
+# CRC: 6abf860b

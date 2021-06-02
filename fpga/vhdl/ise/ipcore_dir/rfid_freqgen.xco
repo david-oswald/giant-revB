@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version 13.2
-# Date: Tue Nov 17 15:24:33 2020
+# Xilinx Core Generator version 14.2
+# Date: Tue Oct 16 19:13:30 2012
 #
 ##############################################################
 #
@@ -22,7 +22,7 @@ SET asysymbol = true
 SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = false
 SET designentry = VHDL
-SET device = xc6slx16
+SET device = xc6slx25
 SET devicefamily = spartan6
 SET flowvendor = Foundation_ISE
 SET formalverification = false
@@ -42,7 +42,7 @@ SELECT DDS_Compiler xilinx.com:ip:dds_compiler:4.0
 CSET amplitude_mode=Full_Range
 CSET channel_pin=false
 CSET channels=1
-CSET clock_enable=false
+CSET clock_enable=true
 CSET component_name=rfid_freqgen
 CSET dds_clock_rate=100
 CSET dsp48_use=Minimal
@@ -130,13 +130,13 @@ CSET poff7=0
 CSET poff8=0
 CSET poff9=0
 CSET por_mode=false
-CSET rdy=false
+CSET rdy=true
 CSET rfd=false
-CSET sclr_pin=false
+CSET sclr_pin=true
 CSET spurious_free_dynamic_range=36
 # END Parameters
 # BEGIN Extra information
-MISC pkg_timestamp=2011-06-21T06:27:03.000Z
+MISC pkg_timestamp=2012-06-22T15:38:15Z
 # END Extra information
 GENERATE
-# CRC: 38cab858
+# CRC: 80db452c

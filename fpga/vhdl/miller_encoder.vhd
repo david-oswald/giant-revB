@@ -80,9 +80,9 @@ architecture behavioral of miller_encoder is
 	
 	-- pulse timing
 	constant PERIOD_END : unsigned(9 downto 0) := to_unsigned(944, 10);
-	constant PAUSE_LENGTH : unsigned(9 downto 0) := to_unsigned(250, 10);
+	constant PAUSE_LENGTH : unsigned(9 downto 0) := to_unsigned(236, 10);
 	constant PAUSE_MIDDLE_BEGIN : unsigned(9 downto 0) := to_unsigned(472, 10);
-	constant PAUSE_MIDDLE_END : unsigned(9 downto 0) := to_unsigned((472 + 250 - 1), 10);
+	constant PAUSE_MIDDLE_END : unsigned(9 downto 0) := to_unsigned((472 + 236 - 1), 10);
 
 	-- internal state machine states
 	type state_type is (S_IDLE, S_NOPAUSE, S_PAUSE_BEGIN, S_PAUSE_MIDDLE, S_NEXTBIT);

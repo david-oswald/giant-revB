@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version 14.7
-# Date: Fri Jul  6 12:33:59 2018
+# Xilinx Core Generator version 14.2
+# Date: Tue Oct 16 19:15:05 2012
 #
 ##############################################################
 #
@@ -22,7 +22,7 @@ SET asysymbol = true
 SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = false
 SET designentry = VHDL
-SET device = xc6slx16
+SET device = xc6slx25
 SET devicefamily = spartan6
 SET flowvendor = Other
 SET formalverification = false
@@ -43,4 +43,4 @@ CSET component_name=memory_controller
 CSET xml_input_file=./memory_controller/user_design/mig.prj
 # END Parameters
 GENERATE
-# CRC: af3d02ad
+# CRC: ed1c18a7

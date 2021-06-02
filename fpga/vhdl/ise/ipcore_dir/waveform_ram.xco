@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version 14.7
-# Date: Fri Jul  6 12:07:03 2018
+# Xilinx Core Generator version 14.2
+# Date: Tue Oct 16 19:12:30 2012
 #
 ##############################################################
 #
@@ -12,7 +12,7 @@
 #
 ##############################################################
 #
-#  Generated from component: xilinx.com:ip:blk_mem_gen:4.1
+#  Generated from component: xilinx.com:ip:blk_mem_gen:7.2
 #
 ##############################################################
 #
@@ -22,7 +22,7 @@ SET asysymbol = true
 SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = false
 SET designentry = VHDL
-SET device = xc6slx16
+SET device = xc6slx25
 SET devicefamily = spartan6
 SET flowvendor = Foundation_ISE
 SET formalverification = false
@@ -36,12 +36,15 @@ SET verilogsim = false
 SET vhdlsim = true
 # END Project Options
 # BEGIN Select
-SELECT Block_Memory_Generator family Xilinx,_Inc. 4.1
+SELECT Block_Memory_Generator xilinx.com:ip:blk_mem_gen:7.2
 # END Select
 # BEGIN Parameters
 CSET additional_inputs_for_power_estimation=false
 CSET algorithm=Minimum_Area
 CSET assume_synchronous_clk=false
+CSET axi_id_width=4
+CSET axi_slave_type=Memory_Slave
+CSET axi_type=AXI4_Full
 CSET byte_size=9
 CSET coe_file=no_coe_file_loaded
 CSET collision_warnings=ALL
@@ -49,10 +52,13 @@ CSET component_name=waveform_ram
 CSET disable_collision_warnings=false
 CSET disable_out_of_range_warnings=false
 CSET ecc=false
+CSET ecctype=No_ECC
+CSET enable_32bit_address=false
 CSET enable_a=Always_Enabled
 CSET enable_b=Always_Enabled
 CSET error_injection_type=Single_Bit_Error_Injection
 CSET fill_remaining_memory_locations=true
+CSET interface_type=Native
 CSET load_init_file=false
 CSET memory_type=True_Dual_Port_RAM
 CSET operating_mode_a=READ_FIRST
@@ -69,16 +75,20 @@ CSET port_b_write_rate=50
 CSET primitive=8kx2
 CSET read_width_a=32
 CSET read_width_b=8
+CSET register_porta_input_of_softecc=false
 CSET register_porta_output_of_memory_core=false
 CSET register_porta_output_of_memory_primitives=false
 CSET register_portb_output_of_memory_core=false
 CSET register_portb_output_of_memory_primitives=false
+CSET register_portb_output_of_softecc=false
 CSET remaining_memory_locations=0
 CSET reset_memory_latch_a=false
 CSET reset_memory_latch_b=false
 CSET reset_priority_a=CE
 CSET reset_priority_b=CE
 CSET reset_type=SYNC
+CSET softecc=false
+CSET use_axi_id=false
 CSET use_byte_write_enable=false
 CSET use_error_injection_pins=false
 CSET use_regcea_pin=false
@@ -90,7 +100,7 @@ CSET write_width_a=32
 CSET write_width_b=8
 # END Parameters
 # BEGIN Extra information
-MISC pkg_timestamp=2016-11-22T16:28:11Z
+MISC pkg_timestamp=2012-06-25T21:54:09Z
 # END Extra information
 GENERATE
-# CRC: 11759008
+# CRC: f367031f

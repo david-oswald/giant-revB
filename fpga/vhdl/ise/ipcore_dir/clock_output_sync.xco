@@ -1,0 +1,86 @@
+##############################################################
+#
+# Xilinx Core Generator version 14.2
+# Date: Tue Oct 16 19:19:25 2012
+#
+##############################################################
+#
+#  This file contains the customisation parameters for a
+#  Xilinx CORE Generator IP GUI. It is strongly recommended
+#  that you do not manually alter this file as it may cause
+#  unexpected and unsupported behavior.
+#
+##############################################################
+#
+#  Generated from component: xilinx.com:ip:selectio_wiz:3.2
+#
+##############################################################
+#
+# BEGIN Project Options
+SET addpads = false
+SET asysymbol = true
+SET busformat = BusFormatAngleBracketNotRipped
+SET createndf = false
+SET designentry = VHDL
+SET device = xc6slx25
+SET devicefamily = spartan6
+SET flowvendor = Other
+SET formalverification = false
+SET foundationsym = false
+SET implementationfiletype = Ngc
+SET package = ftg256
+SET removerpms = false
+SET simulationfiles = Behavioral
+SET speedgrade = -3
+SET verilogsim = false
+SET vhdlsim = true
+# END Project Options
+# BEGIN Select
+SELECT SelectIO_Interface_Wizard xilinx.com:ip:selectio_wiz:3.2
+# END Select
+# BEGIN Parameters
+CSET active_edge=RISING
+CSET bus_dir=OUTPUTS
+CSET bus_in_delay=NONE
+CSET bus_in_tap=0
+CSET bus_io_std=LVCMOS33
+CSET bus_out_delay=NONE
+CSET bus_out_tap=0
+CSET bus_sig_type=SINGLE
+CSET bus_tap_reset=NOT_APP
+CSET bus_tap_wrap=NOT_APP
+CSET clk_buf=BUFPLL
+CSET clk_delay=NONE
+CSET clk_fwd=true
+CSET clk_io_std=LVCMOS33
+CSET clk_sig_type=SINGLE
+CSET clk_tap=0
+CSET component_name=clock_output_sync
+CSET ddr_alignment=C0
+CSET enable_bitslip=false
+CSET enable_train=false
+CSET interface_type=NETWORKING
+CSET notes=None
+CSET serialization_factor=4
+CSET system_data_width=1
+CSET train_constant=0
+CSET use_phase_detector=false
+CSET use_serialization=false
+CSET use_template=Custom
+CSET v6_active_edge=SDR
+CSET v6_bus_in_delay=NONE
+CSET v6_bus_in_tap=0
+CSET v6_bus_out_delay=NONE
+CSET v6_bus_out_tap=0
+CSET v6_clk_buf=BUFIO
+CSET v6_clk_io_std=LVCMOS18
+CSET v6_clk_sig_type=SINGLE
+CSET v6_ddr_alignment=SAME_EDGE_PIPELINED
+CSET v6_interface_type=NETWORKING
+CSET v6_oddr_alignment=SAME_EDGE
+# END Parameters
+# BEGIN Extra information
+MISC pkg_timestamp=2011-10-21T11:59:26Z
+# END Extra information
+GENERATE
+# CRC: 122831ee

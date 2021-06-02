@@ -92,7 +92,9 @@ entity memory_interface is
 		dma_start     : in std_logic;
 		-- DMA data input port
 		dma_input       : in std_logic_vector(15 downto 0);
-
+		-- DMA clock enable
+		dma_ce 			 : in std_logic;
+		
 		-- USB FIFO interface
 		IFCLK         : in std_logic;
 		FD            : out std_logic_vector(15 downto 0); 
@@ -814,7 +816,7 @@ begin
 		c3_p0_rd_en,
 		ddr_fifo_done_buf, ddr_fifo_go,
 		ddr_dma_enabled, ddr_dma_word, ddr_dma_word_count, ddr_dma_address,
-		ddr_dma_word_buffer, dma_input, dma_start, dma_start_prev)
+		ddr_dma_word_buffer, dma_input, dma_start, dma_start_prev, dma_ce)
 	begin
 		-- default is to stay in current state
 		state_next <= state;
@@ -926,39 +928,41 @@ begin
 				end if;
 				
 			when S_DMA_WRITE =>
-				ddr_dma_enabled_next <= '1';
-				
-				if ddr_dma_word = '0' then
-					ddr_dma_word_next <= '1';
-					ddr_dma_word_buffer_next <= dma_input;
+			
+				if dma_ce = '1' then
+					ddr_dma_enabled_next <= '1';
 					
-					-- write data from output FIFO if present
-					if c3_p0_wr_empty = '0' then
-						c3_p0_cmd_byte_addr_next(29 downto 2) <= std_logic_vector(ddr_dma_address(27 downto 0));
-						c3_p0_cmd_byte_addr_next(1 downto 0) <= "00";
-						c3_p0_cmd_bl_next <= (others => '0');
-						c3_p0_cmd_instr_next <= "000";
-						c3_p0_cmd_en_next <= '1';
+					if ddr_dma_word = '0' then
+						ddr_dma_word_next <= '1';
+						ddr_dma_word_buffer_next <= dma_input;
 						
-						-- update write address
-						ddr_dma_address_next <= ddr_dma_address + 1;
+						-- write data from output FIFO if present
+						if c3_p0_wr_empty = '0' then
+							c3_p0_cmd_byte_addr_next(29 downto 2) <= std_logic_vector(ddr_dma_address(27 downto 0));
+							c3_p0_cmd_byte_addr_next(1 downto 0) <= "00";
+							c3_p0_cmd_bl_next <= (others => '0');
+							c3_p0_cmd_instr_next <= "000";
+							c3_p0_cmd_en_next <= '1';
+							
+							-- update write address
+							ddr_dma_address_next <= ddr_dma_address + 1;
+						end if;
+					else
+						ddr_dma_word_next <= '0';
+						
+						-- put into output FIFO
+						c3_p0_wr_data_next <= ddr_dma_word_buffer & dma_input;
+						c3_p0_wr_en_next <= '1';
 					end if;
-				else
-					ddr_dma_word_next <= '0';
 					
-					-- put into output FIFO
-					c3_p0_wr_data_next <= ddr_dma_word_buffer & dma_input;
-					c3_p0_wr_en_next <= '1';
-				end if;
-				
-				-- back to idle mode when all bytes written
-				if ddr_dma_word_count = to_unsigned(0, ddr_dma_word_count'length)  then
-					ddr_dma_enabled_next <= '0';
-					state_next <= S_IDLE;
-				else
-					ddr_dma_word_count_next <= ddr_dma_word_count - 1;
-				end if;
-						
+					-- back to idle mode when all bytes written
+					if ddr_dma_word_count = to_unsigned(0, ddr_dma_word_count'length)  then
+						ddr_dma_enabled_next <= '0';
+						state_next <= S_IDLE;
+					else
+						ddr_dma_word_count_next <= ddr_dma_word_count - 1;
+					end if;
+				end if;	
 		end case;
 	end process;
 	

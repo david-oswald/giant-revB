@@ -92,7 +92,8 @@ entity pic_programmer is
 		pgm : out std_logic;
 		
 		ispclk : out std_logic;
-		ispdat : inout std_logic
+		ispdat : inout std_logic;
+		ispdat_output : out std_logic
 	);
 end pic_programmer;
 
@@ -162,6 +163,8 @@ architecture behavioral of pic_programmer is
 	
 
 begin
+	
+	ispdat_output <= ispdat_oe;
 	
 	MAIN : process(clk)
 	begin
