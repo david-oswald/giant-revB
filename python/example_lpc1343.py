@@ -124,24 +124,28 @@ if __name__=="__main__":
     glitcher.dac.setTriggerEnableState(Register_Bits.FI_TRIGGER_CONTROL_DAC_POWER.value, True)
 
     # Set the fault voltage, normal voltage, off voltage
-    glitcher.set_voltages(0.5, 1.75, 0)
+    glitcher.set_voltages(0.5, 1.9, 0)
     
     # Limits
+    
+    # Offsets
     offset_start = 50000
     #offset_end = 54000
     offset_end = 150000
     offset_step = 100
     
+    # Width range
     w_start = 80
     w_end = 270
     w_step = 10
     
+    # Voltage range
     v_start = 0.4
     v_end = 0.8
     v_step = 0.2
     
+    # Repeat each attempt how many times?
     repeat = 1
-    
     
     # Loop state
     run = True

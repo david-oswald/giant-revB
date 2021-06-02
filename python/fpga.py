@@ -9,94 +9,131 @@ class Commands(Enum):
 
 class Registers(Enum):
 
-    # Read only
+    ## Read-only registers
+    
+    # Smartcard
     SC_STATUS = 3
     SC_DATA_OUT = 4
-    
-    #PIC_DATA_OUT_L = 5
-    #PIC_DATA_OUT_H = 6
-    
-    URX_PW_PACKET_SIZE_OUT_LOW = 5,  
-    URX_PW_PACKET_SIZE_OUT_HIGH = 6,  
-    
-    FI_STATUS = 7
-    FI_DATA_OUT = 8
     SC_DATA_OUT_COUNT = 9
     SC_DATA_IN_COUNT = 10
+
+    # PIC programmer
+    PIC_DATA_OUT_L = 5
+    PIC_DATA_OUT_H = 6
+    
+    # FI pulse generator
+    FI_STATUS = 7
+    FI_DATA_OUT = 8
+    
+    # DDR (currently disabled)
     DDR_DMA_IN_L = 11
-    THRESHOLD_STATUS = 12
-    UTIMING_STATUS = 13
-    UTX_PACKET_COUNT = 14
     DDR_SINGLE_READ = 17
     DDR_STATUS = 18
     DDR_DMA_IN_H = 19
+    
+    # Threshold trigger (currently disabled)
+    THRESHOLD_STATUS = 12
+    
+    # Utiming
+    UTIMING_STATUS = 13
+    
+    # UTX
+    UTX_PACKET_COUNT = 14
     UTX_STATUS = 22
+    
+    # URX
     URX_STATUS = 23,        
     URX_DATA_OUT = 24,  
-    URX_PACKET_SIZE_OUT_LOW = 25,  
+    URX_PACKET_SIZE_OUT_LOW = 25 
     URX_PACKET_COUNT = 26
+    URX_PACKET_SIZE_OUT_HIGH = 29
+    
+    # Utrig
     UTRIG1_STATUS = 27
     UTRIG2_STATUS = 28
-    URX_PACKET_SIZE_OUT_HIGH = 29, 
     
-    URX_PW_DATA_OUT = 30,  
-    URX_PW_STATUS = 31,     
+    ## Read-write registers
     
-    # R/W
+    # Smartcard
     SC_CONTROL = 34
     SC_DATA_IN = 35
     
-    #SPI_CONTROL = 36
-    #SPI_DATA_IN = 37
+    # PIC programmer
     PIC_CONTROL = 36
     PIC_COMMAND = 37
     PIC_DATA_IN_L = 38
     PIC_DATA_IN_H = 39
     
+    # DAC
     DAC_V_LOW = 40
     DAC_V_HIGH = 41
+    DAC_V_OFF = 46
+    DAC_CONTROL = 48
+
+    # FI pulse generator
     FI_CONTROL = 42
     FI_DATA_IN = 43
     FI_ADDR_L = 44
     FI_ADDR_H = 45
-    DAC_V_OFF = 46
     FI_TRIGGER_CONTROL = 47
-    DAC_CONTROL = 48
+    FI_UNIVERSAL_TRIGGER_CONTROL = 81
+   
+    # Threshold trigger (currently disabled)
     THRESHOLD_CONTROL = 49
+    THRESHOLD_VALUE = 61
+    
+    # Utiming
     UTIMING_CONTROL = 50
     UTIMING_DATA_IN = 51
     UTIMING_ADDR_L = 52
     UTIMING_ADDR_H = 53
+    
+    # RFID (currently disabled)
     RFID_RESET_TIME = 54
     RFID_CONTROL = 55
+    
+    # DDR (currently disabled)
     DDR_CONTROL = 56
     DDR_SINGLE_WRITE = 57
     DDR_ADDRESS = 58
     DDR_DATA_COUNT = 59
+    
+    # Pattern trigger (currently disabled)
     DETECTOR_PATTERN = 60
-    THRESHOLD_VALUE = 61
     DETECTOR_DEBUG = 62
     DETECTOR_PATTERN_SAMPLE_COUNT = 63
+    
+    # ADC (currently disabled)
     ADC_CONTROL = 64
+    
+    # Downsampling (currently disabled)
     SCOPE_DOWNSAMPLING_FACTOR = 65
     DETECTOR_DOWNSAMPLING_FACTOR = 66
+    
+    # UTX
     UTX_CONTROL = 67
     UTX_DATA_IN = 68
     UTX_PACKETSIZE_LO = 69
     UTX_CLKDIV = 70
+    UTX_PACKETSIZE_HI = 80
+    
+    # URX
     URX_CONTROL = 71
     URX_CLKDIV = 72
     URX_DELAY = 73
+    
+    # Utrig
     UTRIG1_CONTROL = 74
     UTRIG1_DELAY = 75
     UTRIG1_HOLD = 76
     UTRIG2_CONTROL = 77
     UTRIG2_DELAY = 78
     UTRIG2_HOLD = 79
-    UTX_PACKETSIZE_HI = 80
-    SV_CONTROL = 81
-    UTX_SHIFT_CLK = 82
-    URX_PW_CONTROL = 83
+    
+    # GPIO switch
+    GPIO1_SELECT = 82
+    GPIO1_CONTROL = 83
+    
 
 class Register_Bits(Enum):
     """register bits definitions"""
@@ -235,28 +272,60 @@ class Register_Bits(Enum):
 
     # FI trigger control register bits
     FI_TRIGGER_CONTROL_DAC_POWER = 0
-    FI_TRIGGER_CONTROL_RFID = 1
+    FI_TRIGGER_CONTROL_UNIVERSAL = 1
     FI_TRIGGER_CONTROL_EXT1 = 2
     FI_TRIGGER_CONTROL_ADC = 3
-    FI_TRIGGER_CONTROL_SC_SENT = 4
-    FI_TRIGGER_CONTROL_SC_START_SEND = 5
-    FI_TRIGGER_CONTROL_UTX_START = 6
     FI_TRIGGER_CONTROL_INVERT_EDGE = 7
+    
+    # Universal FI trigger
+    FI_UNIVERSAL_TRIGGER_CONTROL_RFID = 0
+    FI_UNIVERSAL_TRIGGER_CONTROL_UTX_START = 1
+    FI_UNIVERSAL_TRIGGER_CONTROL_UTIMING = 2
+    FI_UNIVERSAL_TRIGGER_CONTROL_UTRIG1 = 3
+    FI_UNIVERSAL_TRIGGER_CONTROL_SC_SENT = 4
+    FI_UNIVERSAL_TRIGGER_CONTROL_SC_START_SEND = 5
 
     # FI status register bits
     FI_STATUS_READY = 0
     FI_STATUS_ARMED = 1
 
-    # Miller control register bits
-    MILLER_CONTROL_TRANSMIT = 0
-
-
-    # Miller status register bits
-    MILLER_STATUS_TRANSMITTING = 0
-
     # RFID control register bits
     RFID_CONTROL_ENABLED = 0
     RFID_CONTROL_TRIGGER_RESET = 1
+    
+    # GPIO control bits
+    GPIO_ENABLE = 0
+    GPIO_CLEAR = 1
+    
+class GPIO_Pins(Enum):
+    GPIO0 = 0
+    GPIO1 = 1
+    GPIO2 = 2
+    GPIO3 = 3
+    GPIO4 = 4
+    GPIO5 = 5
+    GPIO6 = 6
+    GPIO7 = 7
+    
+class GPIO_Select_Bits(Enum):
+    UTX_DATA_OUT = 0
+    FI_TRIGGER = 1
+    FI_INJECT_FAULT = 2
+    UTX_START = 3,
+    URX_DATA_IN = 4,
+    DDR_DMA_START = 5
+    SC_DATA_SENDING_TRIGGER = 6
+    SC_DATA_SENT_TRIGGER = 7
+    THRESH_TRIGGER = 8
+    PIC_V_DD_EN = 9
+    NOT_PIC_V_PP_EN = 10
+    PIC_ISPDAT = 11
+    UTIMING_OUT = 12
+    UTRIG1_TRIGGER = 13
+    UTRIG2_TRIGGER = 14
+    VALUE_0 = 29
+    VALUE_1 = 30
+    VALUE_Z = 31
 
 class FPGA_Vars(Enum):
     # FPGA result codes

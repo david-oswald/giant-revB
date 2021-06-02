@@ -108,7 +108,10 @@ entity main is
 		-- FLAGA	      : in std_logic;
 			
 		-- user I/O pins
+		-- This is the GPIO1 port on the new FPGA board
 		gpio : inout std_logic_vector(7 downto 0)
+		
+		-- GPIO2: to be done
 	);
 end main;
 
@@ -603,7 +606,9 @@ architecture behavioral of main is
 	signal fi_w_en : std_logic;
 	signal fi_d_in, fi_d_out : byte;
 	signal fi_trigger_control : byte;
+	signal fi_universal_trigger_control : byte;
 	signal fi_trigger_ext : std_logic;
+	signal fi_universal_trigger : std_logic;
 	
 	-- Timing controller for UTX triggering
 	signal utiming_control, utiming_status : byte;
@@ -992,11 +997,9 @@ begin
 	
 	SC_CTRL_inst : sc_controller
 	generic map(
-		--CLK_PERIOD => T_CLK/2
 		CLK_PERIOD => T_CLK
 	)
 	port map(
-		--clk => clk_100,
 		clk => clk_50,
 		reset => reset,
 		switch_power => sc_control(0),
@@ -1143,15 +1146,17 @@ begin
 	
 	
 	-- Timing controller
-	-- fi_control         (r/w): 42 (32 + 10)
-	-- fi_d_in            (r/w): 43 (32 + 11)
-	-- fi_addr_l          (r/w): 44 (32 + 12)
-	-- fi_addr_h          (r/w): 45 (32 + 13)
-	-- fi_trigger_control (r/w): 47 (32 + 15)
-	-- fi_status          (r): 7
-	-- fi_d_out           (r): 8
+	-- fi_control                   (r/w): 42 (32 + 10)
+	-- fi_d_in                      (r/w): 43 (32 + 11)
+	-- fi_addr_l                    (r/w): 44 (32 + 12)
+	-- fi_addr_h                    (r/w): 45 (32 + 13)
+	-- fi_trigger_control           (r/w): 47 (32 + 15)
+	-- fi_universal_trigger_control (r/w): 81 (32 + 49)
+	-- fi_status                    (r): 7
+	-- fi_d_out                     (r): 8
 	fi_control <= register_file_writable(10);
 	fi_trigger_control <= register_file_writable(15);
+	fi_universal_trigger_control <= register_file_writable(49);
 	fi_d_in <= register_file_writable(11);
 	fi_addr(7 downto 0) <= register_file_writable(12);
 	fi_addr(9 downto 8) <= register_file_writable_13(1 downto 0);
@@ -1190,21 +1195,32 @@ begin
 	fi_disarm     <= fi_control(3);
 	-- trigger if enabled in resp. control register
 	-- 0: DAC enable (for powerup trigger)
-	-- 1: RFID trigger
+	-- 1: Universal internal trigger
 	-- 2: External trigger
 	-- 3: ADC trigger
+	-- 7: Invert trigger edge direction
+	fi_trigger <= (
+			(
+				(dac_control(0) and fi_trigger_control(0)) or
+				(fi_universal_trigger and fi_trigger_control(1)) or
+				(fi_trigger_ext and fi_trigger_control(2))
+				-- ADC trigger currently missing
+			) xor fi_trigger_control(7)
+		) or fi_control(2); -- this is the software trigger, always enabled
+	
+	-- Internal universal module trigger
+	-- 0: RFID
+	-- 1: UTX start
+	-- 2: Utiming out
+	-- 3: Utrig 1 trigger
 	-- 4: Smartcard data sent trigger 
 	-- 5: Smartcard data begin sending trigger
-	-- 6: Utiming output
-	-- 7: Invert trigger edge direction
-	fi_trigger <= (((dac_control(0) and fi_trigger_control(0)) or
-		(rfid_trigger and fi_trigger_control(1)) or 
-		(fi_trigger_ext and fi_trigger_control(2)) or
-		-- ADC trigger currently missing
-		(sc_data_sent_trigger and fi_trigger_control(4)) or 
-		(sc_data_sending_trigger and fi_trigger_control(5)) or
-		(utiming_out and fi_trigger_control(6))) xor fi_trigger_control(7)) or
-		fi_control(2); -- this is the software trigger, always enabled
+	fi_universal_trigger <= (rfid_trigger and fi_universal_trigger_control(0)) or 
+	    (utx_start and fi_universal_trigger_control(1)) or
+	    (utiming_out and fi_universal_trigger_control(2)) or
+	    (utrig1_trigger and fi_universal_trigger_control(3)) or
+		(sc_data_sent_trigger and fi_universal_trigger_control(4)) or 
+		(sc_data_sending_trigger and fi_universal_trigger_control(5));
 	
 	-- status register
 	-- 0: ready
@@ -1473,6 +1489,13 @@ begin
 	gpio_fpga_o(12) <= utiming_out;
 	gpio_fpga_io_output(12) <= '1';
 	
+	-- Utrig 1 & 2
+	gpio_fpga_o(13) <= utrig1_trigger;
+	gpio_fpga_io_output(13) <= '1';
+	
+	gpio_fpga_o(14) <= utrig2_trigger;
+	gpio_fpga_io_output(14) <= '1';
+	
 	-- Standard values
 	gpio_fpga_o(29) <= '0';
 	gpio_fpga_io_output(29) <= '1';
@@ -1484,8 +1507,8 @@ begin
 	gpio_fpga_io_output(31) <= '0';
 	
 	-- Reset of pins
-	gpio_fpga_o(28 downto 13) <= (others => '0');
-	gpio_fpga_io_output(28 downto 13) <= (others => '0');
+	gpio_fpga_o(28 downto 15) <= (others => '0');
+	gpio_fpga_io_output(28 downto 15) <= (others => '0');
 	
 	-- Processes
 	

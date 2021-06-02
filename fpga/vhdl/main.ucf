@@ -95,14 +95,26 @@ NET "led[3]" IOSTANDARD = LVCMOS33;
 #
 #NET "sc_io" PULLUP;
 
-#NET "gpio[0]" LOC = K16; ##?
-#NET "gpio[1]" LOC = L16; #??
-NET "gpio[2]" LOC = T13; 
-NET "gpio[3]" LOC = P16;
-NET "gpio[4]" LOC = P15;
-NET "gpio[5]" LOC = R14;
-NET "gpio[6]" LOC = T12;
-NET "gpio[7]" LOC = L14;
+
+### OLD VALUES from Zitai
+# NET "gpio[0]" LOC = K16; ##?
+# NET "gpio[1]" LOC = L16; #??
+# NET "gpio[2]" LOC = T13; 
+# NET "gpio[3]" LOC = P16;
+# NET "gpio[4]" LOC = P15;
+# NET "gpio[5]" LOC = R14;
+# NET "gpio[6]" LOC = T12;
+# NET "gpio[7]" LOC = L14;
+
+# NET "gpio[0]" LOC = ; # D8  old board = D3 on adapter: FX2-100: 91
+# NET "gpio[1]" LOC = ; # D9  old board = D4 on adapter: FX2-100: 89
+# NET "gpio[2]" LOC = ; # D10 old board = D5 on adapter: FX2-100: 87
+NET "gpio[3]" LOC = N16; # D11 old board = C7 on adapter: N16
+NET "gpio[4]" LOC = P15; # D12 old board = D8 on adapter: P15
+NET "gpio[5]" LOC = R14; # D13 old board = C10 on adapter: R14
+NET "gpio[6]" LOC = T12; # D14 old board = D11 on adapter: T12
+NET "gpio[7]" LOC = L14; # D15 old board = C13 on adapter: L14
+
 
 NET "gpio[0]" IOSTANDARD = LVCMOS33;
 NET "gpio[1]" IOSTANDARD = LVCMOS33;

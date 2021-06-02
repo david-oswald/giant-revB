@@ -1,8 +1,10 @@
 from spartan6_fpga import spartan6_fpga
-from fpga import Commands, Registers, Register_Bits, FPGA_Vars
+from fpga import *
 from dac import dac
+from gpio import gpio
 import logging
 import time
+import traceback
 
 
 class glitcher:
@@ -93,11 +95,17 @@ class glitcher:
         self.dac.setEnabled(1)
 
 
+    def test_gpio(self):
+        self.reset_fpga()
+        io = gpio()
+        io.setPinMux(GPIO_Pins.GPIO6.value, GPIO_Select_Bits.FI_INJECT_FAULT.value)
+        io.updateMuxState()
+
     def test_fi(self):
         '''
             tests the Fault Injection on the FPGA. Adds two pulses, sets a software trigger and arms the FPGA
         '''
-        self.reset_fpga()
+        #self.reset_fpga()
         self.dac.setTestModeEnabled(0)
         self.dac.setRfidModeEnabled(0)
 
@@ -114,7 +122,6 @@ class glitcher:
         self.add_pulse(200000, 50)
         self.add_pulse(1000, 50)
 
-        
         # Disable DAC 
         self.dac.setEnabled(False)
         
@@ -141,5 +148,11 @@ class glitcher:
 if __name__ == "__main__":
     logging.basicConfig(level = logging.INFO)
     glitcher = glitcher()
-    glitcher.test_fi()
+
+    try:
+        glitcher.test_gpio()
+        glitcher.test_fi()
+    except Exception as e:
+        logging.error(traceback.format_exc())
+        
     glitcher.close()
