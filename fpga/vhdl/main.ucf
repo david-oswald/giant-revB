@@ -1,6 +1,172 @@
 # This project uses the USB-FPGA-Module v2.0.4 made by Ztex
 # https://www.ztex.de/usb-fpga-2/usb-fpga-2.04.e.html
 
+## Basic pins
+NET "reset_in" LOC = R11;
+NET "reset_in" IOSTANDARD = LVCMOS33;
+
+NET "clk_in" LOC = J16;
+NET "clk_in" IOSTANDARD = LVCMOS33;
+NET "clk_in" TNM_NET = "clk_in";
+NET "clk_in" DRIVE = 24;
+NET "clk_in" SLEW = FAST;
+TIMESPEC TS_clk_in = PERIOD "clk_in" 48 MHz HIGH 50 %;
+
+## Clock constraints
+NET "clk_50" TNM_NET = "CLKGRP_50";
+NET "clk_100" TNM_NET = "CLKGRP_100";
+NET "clk_48" TNM_NET = "CLKGRP_48";
+
+TIMESPEC TS_AC = FROM "CLKGRP_48" TO "CLKGRP_50" TIG ;
+TIMESPEC TS_CA = FROM "CLKGRP_50" TO "CLKGRP_48" TIG ;
+
+## Maybe needed later
+#TIMESPEC TS_IN_AB = FROM "CLK" THRU "ASYNC_FIFO_IN" TO "IFCLK" TIG;
+#TIMESPEC TS_IN_BA = FROM "IFCLK" THRU "ASYNC_FIFO_IN" TO "IFCLK" TIG;
+
+#TIMESPEC TS_OUT_AB = FROM "CLK" THRU "ASYNC_FIFO_OUT" TO "IFCLK" TIG;
+#TIMESPEC TS_OUT_BA = FROM "IFCLK" THRU "ASYNC_FIFO_OUT" TO "IFCLK" TIG;
+
+#TIMESPEC TS_AB = FROM "IFCLK" TO "CLK" TIG;
+#TIMESPEC TS_BA = FROM "CLK" TO "IFCLK" TIG;
+#TIMESPEC TS_AC = FROM "clk_in" TO "CLK" TIG;
+#TIMESPEC TS_CA = FROM "CLK" TO "clk_in" TIG;
+
+# Interface USB
+NET "w_en" LOC = P10; 
+NET "in_pin" LOC = N12; 
+NET "r_en" LOC = P12; 
+NET "out_pin" LOC = N5; 
+
+NET "in_pin" IOSTANDARD = LVCMOS33;
+NET "out_pin" IOSTANDARD = LVCMOS33;
+NET "r_en" IOSTANDARD = LVCMOS33;
+NET "w_en" IOSTANDARD = LVCMOS33;
+
+## LEDs
+NET "led[0]" LOC = A4;
+NET "led[1]" LOC = C4;
+NET "led[2]" LOC = B5;
+NET "led[3]" LOC = D5;
+
+NET "led[0]" IOSTANDARD = LVCMOS33;
+NET "led[1]" IOSTANDARD = LVCMOS33;
+NET "led[2]" IOSTANDARD = LVCMOS33;
+NET "led[3]" IOSTANDARD = LVCMOS33;
+
+## GPIO
+# NET "gpio1[0]" LOC = ; # D8  old board = D3 on adapter: FX2-100: 91
+# NET "gpio1[1]" LOC = ; # D9  old board = D4 on adapter: FX2-100: 89
+# NET "gpio1[2]" LOC = ; # D10 old board = D5 on adapter: FX2-100: 87
+NET "gpio1[3]" LOC = N16; # D11 old board = C7 on adapter: N16
+NET "gpio1[4]" LOC = P15; # D12 old board = D8 on adapter: P15
+NET "gpio1[5]" LOC = R14; # D13 old board = C10 on adapter: R14
+NET "gpio1[6]" LOC = T12; # D14 old board = D11 on adapter: T12
+NET "gpio1[7]" LOC = L14; # D15 old board = C13 on adapter: L14
+
+NET "gpio1[0]" IOSTANDARD = LVCMOS33;
+NET "gpio1[1]" IOSTANDARD = LVCMOS33;
+NET "gpio1[2]" IOSTANDARD = LVCMOS33;
+NET "gpio1[3]" IOSTANDARD = LVCMOS33;
+NET "gpio1[4]" IOSTANDARD = LVCMOS33;
+NET "gpio1[5]" IOSTANDARD = LVCMOS33;
+NET "gpio1[6]" IOSTANDARD = LVCMOS33;
+NET "gpio1[7]" IOSTANDARD = LVCMOS33;
+
+## DAC
+NET "dac_clk" LOC = E11;		
+NET "dac_v_out[0]" LOC = C5;
+NET "dac_v_out[1]" LOC = D6;
+NET "dac_v_out[2]" LOC = C7;
+NET "dac_v_out[3]" LOC = A7;
+NET "dac_v_out[4]" LOC = F7;
+NET "dac_v_out[5]" LOC = E7;
+NET "dac_v_out[6]" LOC = A8;
+NET "dac_v_out[7]" LOC = B8;
+
+NET "dac_clk" IOSTANDARD = LVCMOS33;
+NET "dac_v_out[0]" IOSTANDARD = LVCMOS33;
+NET "dac_v_out[1]" IOSTANDARD = LVCMOS33;
+NET "dac_v_out[2]" IOSTANDARD = LVCMOS33;
+NET "dac_v_out[3]" IOSTANDARD = LVCMOS33;
+NET "dac_v_out[4]" IOSTANDARD = LVCMOS33;
+NET "dac_v_out[5]" IOSTANDARD = LVCMOS33;
+NET "dac_v_out[6]" IOSTANDARD = LVCMOS33;
+NET "dac_v_out[7]" IOSTANDARD = LVCMOS33;
+
+NET "dac_v_out[0]" SLEW = FAST;
+NET "dac_v_out[1]" SLEW = FAST;
+NET "dac_v_out[2]" SLEW = FAST;
+NET "dac_v_out[3]" SLEW = FAST;
+NET "dac_v_out[4]" SLEW = FAST;
+NET "dac_v_out[5]" SLEW = FAST;
+NET "dac_v_out[6]" SLEW = FAST;
+NET "dac_v_out[7]" SLEW = FAST;
+
+
+#### CURRENTLY DISABLED NETS
+
+# Smartcard
+#NET "sc_clk" LOC = C13;
+#NET "sc_io" LOC = B16;		#??
+#NET "sc_pin4" LOC = B14;
+#NET "sc_pin6" LOC = B16;
+#NET "sc_pin8" LOC = A13;	#??
+#NET "sc_rst" LOC = A12;
+#NET "sc_sw1" LOC = C16;
+#
+#NET "sc_clk" IOSTANDARD = LVCMOS33;
+#NET "sc_io" IOSTANDARD = LVCMOS33;
+#NET "sc_pin4" IOSTANDARD = LVCMOS33;
+#NET "sc_pin6" IOSTANDARD = LVCMOS33;
+#NET "sc_pin8" IOSTANDARD = LVCMOS33;
+#NET "sc_rst" IOSTANDARD = LVCMOS33;
+#NET "sc_sw1" IOSTANDARD = LVCMOS33;
+#
+#NET "sc_io" PULLUP;
+
+#NET "pc[0]" LOC = G12; _AV
+#NET "pc[1]" LOC = G11; _WE
+#NET "pc[2]" LOC = H15; _RE
+#NET "pc[3]" LOC = M14; _IN_WE
+#NET "pc[4]" LOC = P11; _IN_PIN
+#NET "pc[5]" LOC = H14; _OUT_RE
+#NET "pc[6]" LOC = H11; _OUT_PIN
+#NET "pc[7]" LOC = H13;
+
+# ADC
+#NET "adc_v_in[0]" SLEW = FAST;
+#NET "adc_v_in[1]" SLEW = FAST;
+#NET "adc_v_in[2]" SLEW = FAST;
+#NET "adc_v_in[3]" SLEW = FAST;
+#NET "adc_v_in[4]" SLEW = FAST;
+#NET "adc_v_in[5]" SLEW = FAST;
+#NET "adc_v_in[6]" SLEW = FAST;
+#NET "adc_v_in[7]" SLEW = FAST;
+
+#NET "adc_encode" LOC = N6;
+#NET "adc_v_in[0]" LOC = K14;
+#NET "adc_v_in[1]" LOC = M13;
+#NET "adc_v_in[2]" LOC = K11;
+#NET "adc_v_in[3]" LOC = M10;
+#NET "adc_v_in[4]" LOC = N9;
+#NET "adc_v_in[5]" LOC = T8;
+#NET "adc_v_in[6]" LOC = R7;
+#NET "adc_v_in[7]" LOC = P7;
+
+#NET "adc_encode" IOSTANDARD = LVCMOS33;
+#NET "adc_v_in[0]" IOSTANDARD = LVCMOS33;
+#NET "adc_v_in[1]" IOSTANDARD = LVCMOS33;
+#NET "adc_v_in[2]" IOSTANDARD = LVCMOS33;
+#NET "adc_v_in[3]" IOSTANDARD = LVCMOS33;
+#NET "adc_v_in[4]" IOSTANDARD = LVCMOS33;
+#NET "adc_v_in[5]" IOSTANDARD = LVCMOS33;
+#NET "adc_v_in[6]" IOSTANDARD = LVCMOS33;
+#NET "adc_v_in[7]" IOSTANDARD = LVCMOS33;
+
+#NET "adc_encode" DRIVE = 12;
+#NET "adc_encode" SLEW = FAST;
+
 # Slave Fifo Interface
 #NET "IFCLK" LOC = J14;
 #NET "IFCLK" IOSTANDARD = LVCMOS33;
@@ -22,7 +188,7 @@
 #NET "FULLFLAGB" IOSTANDARD = LVCMOS33;
 #NET "FLAGA" LOC = G14;
 #NET "FLAGA" IOSTANDARD = LVCMOS33;
-#
+
 #NET "FD[0]" LOC = D16;
 #NET "FD[0]" IOSTANDARD = LVCMOS33;
 #NET "FD[1]" LOC = F15;
@@ -57,170 +223,7 @@
 #NET "FD[15]" IOSTANDARD = LVCMOS33;
 #NET "FD[15]" LOC = M14;
 
-
-
-
-NET "reset_in" LOC = R11;#R3;
-#Created by Constraints Editor (xc6slx25-ftg256-3) - 2011/01/06
-NET "clk_in" TNM_NET = "clk_in";
-TIMESPEC TS_clk_in = PERIOD "clk_in" 48 MHz HIGH 50 %;
-
-NET "clk_in" LOC = J16;
-
-NET "led[0]" LOC = A4;
-NET "led[1]" LOC = C4;
-NET "led[2]" LOC = B5;
-NET "led[3]" LOC = D5;
-
-NET "led[0]" IOSTANDARD = LVCMOS33;
-NET "led[1]" IOSTANDARD = LVCMOS33;
-NET "led[2]" IOSTANDARD = LVCMOS33;
-NET "led[3]" IOSTANDARD = LVCMOS33;
-
-#NET "sc_clk" LOC = C13;
-#NET "sc_io" LOC = B16;		#??
-#NET "sc_pin4" LOC = B14;
-#NET "sc_pin6" LOC = B16;
-#NET "sc_pin8" LOC = A13;	#??
-#NET "sc_rst" LOC = A12;
-#NET "sc_sw1" LOC = C16;
-#
-#NET "sc_clk" IOSTANDARD = LVCMOS33;
-#NET "sc_io" IOSTANDARD = LVCMOS33;
-#NET "sc_pin4" IOSTANDARD = LVCMOS33;
-#NET "sc_pin6" IOSTANDARD = LVCMOS33;
-#NET "sc_pin8" IOSTANDARD = LVCMOS33;
-#NET "sc_rst" IOSTANDARD = LVCMOS33;
-#NET "sc_sw1" IOSTANDARD = LVCMOS33;
-#
-#NET "sc_io" PULLUP;
-
-
-### OLD VALUES from Zitai
-# NET "gpio[0]" LOC = K16; ##?
-# NET "gpio[1]" LOC = L16; #??
-# NET "gpio[2]" LOC = T13; 
-# NET "gpio[3]" LOC = P16;
-# NET "gpio[4]" LOC = P15;
-# NET "gpio[5]" LOC = R14;
-# NET "gpio[6]" LOC = T12;
-# NET "gpio[7]" LOC = L14;
-
-# NET "gpio[0]" LOC = ; # D8  old board = D3 on adapter: FX2-100: 91
-# NET "gpio[1]" LOC = ; # D9  old board = D4 on adapter: FX2-100: 89
-# NET "gpio[2]" LOC = ; # D10 old board = D5 on adapter: FX2-100: 87
-NET "gpio[3]" LOC = N16; # D11 old board = C7 on adapter: N16
-NET "gpio[4]" LOC = P15; # D12 old board = D8 on adapter: P15
-NET "gpio[5]" LOC = R14; # D13 old board = C10 on adapter: R14
-NET "gpio[6]" LOC = T12; # D14 old board = D11 on adapter: T12
-NET "gpio[7]" LOC = L14; # D15 old board = C13 on adapter: L14
-
-
-NET "gpio[0]" IOSTANDARD = LVCMOS33;
-NET "gpio[1]" IOSTANDARD = LVCMOS33;
-NET "gpio[2]" IOSTANDARD = LVCMOS33;
-NET "gpio[3]" IOSTANDARD = LVCMOS33;
-NET "gpio[4]" IOSTANDARD = LVCMOS33;
-NET "gpio[5]" IOSTANDARD = LVCMOS33;
-NET "gpio[6]" IOSTANDARD = LVCMOS33;
-NET "gpio[7]" IOSTANDARD = LVCMOS33;
-
-
-
-
-NET "dac_clk" LOC = E11;		
-NET "dac_v_out[0]" LOC = C5;
-NET "dac_v_out[1]" LOC = D6;
-NET "dac_v_out[2]" LOC = C7;
-NET "dac_v_out[3]" LOC = A7;
-NET "dac_v_out[4]" LOC = F7;
-NET "dac_v_out[5]" LOC = E7;
-NET "dac_v_out[6]" LOC = A8;
-NET "dac_v_out[7]" LOC = B8;
-
-NET "dac_v_out[0]" IOSTANDARD = LVCMOS33;
-NET "dac_v_out[1]" IOSTANDARD = LVCMOS33;
-NET "dac_v_out[2]" IOSTANDARD = LVCMOS33;
-NET "dac_v_out[3]" IOSTANDARD = LVCMOS33;
-NET "dac_v_out[4]" IOSTANDARD = LVCMOS33;
-NET "dac_v_out[5]" IOSTANDARD = LVCMOS33;
-NET "dac_v_out[6]" IOSTANDARD = LVCMOS33;
-NET "dac_v_out[7]" IOSTANDARD = LVCMOS33;
-NET "dac_v_out[0]" SLEW = FAST;
-NET "dac_v_out[1]" SLEW = FAST;
-NET "dac_v_out[2]" SLEW = FAST;
-NET "dac_v_out[3]" SLEW = FAST;
-NET "dac_v_out[4]" SLEW = FAST;
-NET "dac_v_out[5]" SLEW = FAST;
-NET "dac_v_out[6]" SLEW = FAST;
-NET "dac_v_out[7]" SLEW = FAST;
-
-NET "dac_clk" IOSTANDARD = LVCMOS33;
-
-#NET "pc[0]" LOC = G12; _AV
-#NET "pc[1]" LOC = G11; _WE
-#NET "pc[2]" LOC = H15; _RE
-#NET "pc[3]" LOC = M14; _IN_WE
-#NET "pc[4]" LOC = P11; _IN_PIN
-#NET "pc[5]" LOC = H14; _OUT_RE
-#NET "pc[6]" LOC = H11; _OUT_PIN
-#NET "pc[7]" LOC = H13;
-
-NET "w_en" LOC = P10; 
-NET "in_pin" LOC = N12; 
-NET "r_en" LOC = P12; 
-NET "out_pin" LOC = N5; 
-
-
-#NET "a_v" LOC = P10;
-#NET "in_pin" LOC = P5;
-#NET "out_pin" LOC = L7;
-#NET "r_en" LOC = P12;
-#NET "re_out" LOC = L8;
-#NET "w_en" LOC = N12;
-#NET "we_in" LOC = N5;
-NET "clk_in" IOSTANDARD = LVCMOS33;
-NET "in_pin" IOSTANDARD = LVCMOS33;
-NET "out_pin" IOSTANDARD = LVCMOS33;
-NET "r_en" IOSTANDARD = LVCMOS33;
-#NET "re_out" IOSTANDARD = LVCMOS33;
-NET "reset_in" IOSTANDARD = LVCMOS33;
-NET "w_en" IOSTANDARD = LVCMOS33;
-#NET "we_in" IOSTANDARD = LVCMOS33;
-
-#NET "adc_encode" LOC = N6;
-#NET "adc_v_in[0]" LOC = K14;
-#NET "adc_v_in[1]" LOC = M13;
-#NET "adc_v_in[2]" LOC = K11;
-#NET "adc_v_in[3]" LOC = M10;
-#NET "adc_v_in[4]" LOC = N9;
-#NET "adc_v_in[5]" LOC = T8;
-#NET "adc_v_in[6]" LOC = R7;
-#NET "adc_v_in[7]" LOC = P7;
-#
-#NET "adc_encode" IOSTANDARD = LVCMOS33;
-#NET "adc_v_in[0]" IOSTANDARD = LVCMOS33;
-#NET "adc_v_in[1]" IOSTANDARD = LVCMOS33;
-#NET "adc_v_in[2]" IOSTANDARD = LVCMOS33;
-#NET "adc_v_in[3]" IOSTANDARD = LVCMOS33;
-#NET "adc_v_in[4]" IOSTANDARD = LVCMOS33;
-#NET "adc_v_in[5]" IOSTANDARD = LVCMOS33;
-#NET "adc_v_in[6]" IOSTANDARD = LVCMOS33;
-#NET "adc_v_in[7]" IOSTANDARD = LVCMOS33;
-#
-#NET "adc_encode" DRIVE = 12;
-#NET "adc_encode" SLEW = FAST;
-
-NET "clk_in" DRIVE = 24;
-#NET "adc_v_in[0]" SLEW = FAST;
-#NET "adc_v_in[1]" SLEW = FAST;
-#NET "adc_v_in[2]" SLEW = FAST;
-#NET "adc_v_in[3]" SLEW = FAST;
-#NET "adc_v_in[4]" SLEW = FAST;
-#NET "adc_v_in[5]" SLEW = FAST;
-#NET "adc_v_in[6]" SLEW = FAST;
-#NET "adc_v_in[7]" SLEW = FAST;
-NET "clk_in" SLEW = FAST;
+### DDR
 
 ############################################################################
 ## 
@@ -409,43 +412,3 @@ CONFIG PROHIBIT = N1,H1;
 #input termination value.  Otherwise, RZQ should be left as a no-connect (NC) pin.#
 ##################################################################################
 #NET "mcb3_rzq" LOC = M4;
-#Created by Constraints Editor (xc6slx25-ftg256-3) - 2011/10/25
-#NET "clk_main_buf" TNM_NET = "CLK";
-#NET "IFCLK" TNM_NET = "IFCLK";
-
-NET "clk_50" TNM_NET = "CLKGRP_50";
-NET "clk_100" TNM_NET = "CLKGRP_100";
-NET "clk_48" TNM_NET = "CLKGRP_48";
-# NET "IFCLK" TNM_NET = "IFCLKGRP";
-# NET "adc_encode_fb" TNM_NET = "adc_encode_fb";
-
-#TIMESPEC TS_CLK_100 = PERIOD "CLKGRP_100" 10 ns;
-#TIMESPEC TS_CLK_50 = PERIOD "CLKGRP_50" 20 ns;
-#TIMESPEC TS_CLK_48 = PERIOD "CLKGRP_48" 48 MHz;
-# TIMESPEC TS_ADC_ENCODE_FB = PERIOD "adc_encode_fb" TS_CLK_100  HIGH 50 %;
-
-# TIMESPEC TS_AB = FROM "IFCLKGRP" TO "CLKGRP_50" TIG ;
-# TIMESPEC TS_BA = FROM "CLKGRP_50" TO "IFCLKGRP" TIG ;
-TIMESPEC TS_AC = FROM "CLKGRP_48" TO "CLKGRP_50" TIG ;
-TIMESPEC TS_CA = FROM "CLKGRP_50" TO "CLKGRP_48" TIG ;
-
-#TIMESPEC TS_IFCLK = PERIOD "IFCLK" 48 MHz HIGH 50 %;
-
-#Created by Constraints Editor (xc6slx25-ftg256-3) - 2011/11/02
-# PlanAhead Generated timing constraints 
-
-#Created by Constraints Editor (xc6slx25-ftg256-3) - 2011/11/02
-
-#INST "*/INPUT_CLOCK_SYNC_inst*" TPTHRU = "ASYNC_FIFO_IN";
-#INST "*/OUTPUT_CLOCK_SYNC_inst*" TPTHRU = "ASYNC_FIFO_OUT";
-
-#TIMESPEC TS_IN_AB = FROM "CLK" THRU "ASYNC_FIFO_IN" TO "IFCLK" TIG;
-#TIMESPEC TS_IN_BA = FROM "IFCLK" THRU "ASYNC_FIFO_IN" TO "IFCLK" TIG;
-
-#TIMESPEC TS_OUT_AB = FROM "CLK" THRU "ASYNC_FIFO_OUT" TO "IFCLK" TIG;
-#TIMESPEC TS_OUT_BA = FROM "IFCLK" THRU "ASYNC_FIFO_OUT" TO "IFCLK" TIG;
-
-#TIMESPEC TS_AB = FROM "IFCLK" TO "CLK" TIG;
-#TIMESPEC TS_BA = FROM "CLK" TO "IFCLK" TIG;
-#TIMESPEC TS_AC = FROM "clk_in" TO "CLK" TIG;
-#TIMESPEC TS_CA = FROM "CLK" TO "clk_in" TIG;

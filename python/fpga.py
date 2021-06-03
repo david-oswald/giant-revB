@@ -133,7 +133,7 @@ class Registers(Enum):
     # GPIO switch
     GPIO1_SELECT = 82
     GPIO1_CONTROL = 83
-    
+    GPIO_OUTPUTS = 84
 
 class Register_Bits(Enum):
     """register bits definitions"""
@@ -275,6 +275,8 @@ class Register_Bits(Enum):
     FI_TRIGGER_CONTROL_UNIVERSAL = 1
     FI_TRIGGER_CONTROL_EXT1 = 2
     FI_TRIGGER_CONTROL_ADC = 3
+    FI_TRIGGER_GPIO_OUTPUT_0 = 4
+    FI_TRIGGER_GPIO_OUTPUT_1 = 5
     FI_TRIGGER_CONTROL_INVERT_EDGE = 7
     
     # Universal FI trigger
@@ -323,6 +325,10 @@ class GPIO_Select_Bits(Enum):
     UTIMING_OUT = 12
     UTRIG1_TRIGGER = 13
     UTRIG2_TRIGGER = 14
+    GPIO_OUTPUT_0 = 15
+    GPIO_OUTPUT_1 = 16
+    GPIO_OUTPUT_2 = 17
+    GPIO_OUTPUT_3 = 18
     VALUE_0 = 29
     VALUE_1 = 30
     VALUE_Z = 31

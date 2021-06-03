@@ -109,9 +109,10 @@ entity main is
 			
 		-- user I/O pins
 		-- This is the GPIO1 port on the new FPGA board
-		gpio : inout std_logic_vector(7 downto 0)
+		gpio1 : inout std_logic_vector(7 downto 0)
 		
 		-- GPIO2: to be done
+		-- gpio2 : inout std_logic_vector(7 downto 0)
 	);
 end main;
 
@@ -508,6 +509,8 @@ architecture behavioral of main is
 	signal gpio_fpga_io_output : std_logic_vector(31 downto 0);
 	signal gpio_select_in : byte;
 	signal gpio_control : byte;
+	signal gpio_outputs : byte;
+	signal gpio_inputs  : byte;
 	signal gpio_select_in_w_en : std_logic;
 	
 	-- universal tx core
@@ -1197,14 +1200,19 @@ begin
 	-- 0: DAC enable (for powerup trigger)
 	-- 1: Universal internal trigger
 	-- 2: External trigger
-	-- 3: ADC trigger
+	-- 3: RESERVED: ADC trigger
+	-- 4: Internal GPIO output 0
+	-- 5: Internal GPIO output 1
+	-- 6: RESERVED: GPIO input 0
 	-- 7: Invert trigger edge direction
 	fi_trigger <= (
 			(
 				(dac_control(0) and fi_trigger_control(0)) or
 				(fi_universal_trigger and fi_trigger_control(1)) or
-				(fi_trigger_ext and fi_trigger_control(2))
-				-- ADC trigger currently missing
+				(fi_trigger_ext and fi_trigger_control(2)) or
+				-- 3: ADC trigger currently missing
+				(gpio_outputs(0) and fi_trigger_control(4)) or
+				(gpio_outputs(1) and fi_trigger_control(5)) 
 			) xor fi_trigger_control(7)
 		) or fi_control(2); -- this is the software trigger, always enabled
 	
@@ -1419,12 +1427,13 @@ begin
 	-- GPIO
 	-- gpio_select_in     (r/w): 82 (32 + 50)
 	-- gpio_control       (r/w): 83 (32 + 51)
+	-- gpio_outputs       (r/w): 84 (32 + 52)
 	GPIO_SW : gpio_switch
 	port map
 	( 
 		clk => clk,
 		reset => reset,
-		gpio => gpio,
+		gpio => gpio1,
 		gpio_enable => gpio_control(0),
 		fpga_i => gpio_fpga_i,
 		fpga_o => gpio_fpga_o,
@@ -1439,9 +1448,13 @@ begin
 	-- 1: Clear assignment
 	gpio_control <= register_file_writable(51);
 	
+	-- Select register
 	gpio_select_in <= register_file_writable(50);
 	gpio_select_in_w_en <= register_file_w(82);
 
+	-- Output register
+	gpio_outputs <= register_file_writable(52);
+	
 	-- UTX pins
 	gpio_fpga_o(0) <= utx_data_out when utx_data_out_valid = '1' else 'Z';
 	gpio_fpga_io_output(0) <= utx_data_out_valid;
@@ -1496,6 +1509,21 @@ begin
 	gpio_fpga_o(14) <= utrig2_trigger;
 	gpio_fpga_io_output(14) <= '1';
 	
+	-- GPIO outputs
+	gpio_fpga_o(15) <= gpio_outputs(0);
+	gpio_fpga_io_output(15) <= '1';
+	
+	gpio_fpga_o(16) <= gpio_outputs(1);
+	gpio_fpga_io_output(16) <= '1';
+	
+	gpio_fpga_o(17) <= gpio_outputs(2);
+	gpio_fpga_io_output(17) <= '1';
+	
+	gpio_fpga_o(18) <= gpio_outputs(3);
+	gpio_fpga_io_output(18) <= '1';
+	
+	-- TODO: GPIO inputs
+	
 	-- Standard values
 	gpio_fpga_o(29) <= '0';
 	gpio_fpga_io_output(29) <= '1';
@@ -1507,8 +1535,8 @@ begin
 	gpio_fpga_io_output(31) <= '0';
 	
 	-- Reset of pins
-	gpio_fpga_o(28 downto 15) <= (others => '0');
-	gpio_fpga_io_output(28 downto 15) <= (others => '0');
+	gpio_fpga_o(28 downto 19) <= (others => '0');
+	gpio_fpga_io_output(28 downto 19) <= (others => '0');
 	
 	-- Processes
 	

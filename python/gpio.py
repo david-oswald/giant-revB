@@ -33,7 +33,14 @@ class gpio:
             raise ValueError("Selected pin does not exist")
         else:
             self.settings[pin] = select
-        
+    
+    def setInternalOutput(self, pin, value):
+        if pin >= 8:
+            raise ValueError("Selected pin does not exist")
+            
+        logging.info("Setting internal GPIO {} -> {}".format(pin, value))
+        fpga = spartan6_fpga.getInstance()
+        fpga.setBitRegister(Registers.GPIO_OUTPUTS.value, pin, value)
         
     def updateMuxState(self):
         ''' Updates mux state on FPGA '''

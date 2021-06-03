@@ -98,19 +98,40 @@ class glitcher:
     def test_gpio(self):
         self.reset_fpga()
         io = gpio()
-        io.setPinMux(GPIO_Pins.GPIO6.value, GPIO_Select_Bits.FI_INJECT_FAULT.value)
+        
+        # Mux a constant 1 on GPIO1_6
+        io.setPinMux(GPIO_Pins.GPIO6.value, GPIO_Select_Bits.VALUE_1.value)
         io.updateMuxState()
-
+        time.sleep(1)
+        
+        # Mux the internal output 0 to the same pin and set it to zero
+        io.setInternalOutput(GPIO_Pins.GPIO0.value, False);
+        io.setPinMux(GPIO_Pins.GPIO6.value, GPIO_Select_Bits.GPIO_OUTPUT_0.value)
+        io.updateMuxState()
+        time.sleep(1)
+        
+        # Now set it to one
+        #io.setInternalOutput(GPIO_Pins.GPIO0.value, True);
+        #time.sleep(2)
+        #io.setInternalOutput(GPIO_Pins.GPIO0.value, False);
+        
     def test_fi(self):
         '''
             tests the Fault Injection on the FPGA. Adds two pulses, sets a software trigger and arms the FPGA
         '''
         #self.reset_fpga()
+        self.dac.setEnabled(True)
         self.dac.setTestModeEnabled(0)
         self.dac.setRfidModeEnabled(0)
+        
+        # Mux the internal output 0 to the same pin and set it to zero
+        io = gpio()
+        io.setInternalOutput(GPIO_Pins.GPIO0.value, False);
+        io.setPinMux(GPIO_Pins.GPIO6.value, GPIO_Select_Bits.GPIO_OUTPUT_0.value)
+        io.updateMuxState()
 
-        # Setup trigger
-        self.dac.setTriggerEnableState(Register_Bits.FI_TRIGGER_CONTROL_DAC_POWER.value, True)
+        # Setup trigger on this internal output (which is also on GPIO1_6)
+        self.dac.setTriggerEnableState(Register_Bits.FI_TRIGGER_GPIO_OUTPUT_0.value, True)
 
         # Set the fault voltage, normal voltage, off voltage
         self.set_voltages(0, 3.3, 0)
@@ -121,15 +142,12 @@ class glitcher:
         # Set a pulse
         self.add_pulse(200000, 50)
         self.add_pulse(1000, 50)
-
-        # Disable DAC 
-        self.dac.setEnabled(False)
         
         # Arm the fault
         self.dac.arm()
 
-        # This should trigger - needs fixed bitstream
-        self.dac.setEnabled(True)
+        # This should trigger
+        io.setInternalOutput(GPIO_Pins.GPIO0.value, True);
 
 
     def clear_pulses(self):
