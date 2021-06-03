@@ -14382,7 +14382,7 @@ waveform</text>
 <wire x1="129.54" y1="-20.32" x2="129.54" y2="-73.66" width="0.8128" layer="97"/>
 <wire x1="88.9" y1="38.1" x2="111.76" y2="15.24" width="0.1524" layer="97"/>
 <wire x1="111.76" y1="15.24" x2="111.76" y2="10.16" width="0.1524" layer="97"/>
-<text x="76.2" y="35.56" size="1.016" layer="150" align="bottom-right">Connect so that FPGA has to 
+<text x="73.66" y="33.02" size="1.016" layer="150" align="bottom-right">Connect so that FPGA has to 
 start DAC?</text>
 </plain>
 <instances>
@@ -14756,6 +14756,13 @@ start DAC?</text>
 <junction x="111.76" y="-43.18"/>
 </segment>
 </net>
+<net name="DAC_SLEEP" class="0">
+<segment>
+<pinref part="AD9708" gate="AD9708" pin="SLEEP"/>
+<wire x1="76.2" y1="38.1" x2="71.12" y2="38.1" width="0.1524" layer="91"/>
+<label x="71.12" y="38.1" size="1.4224" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
 </nets>
 </sheet>
 <sheet>
@@ -14766,13 +14773,18 @@ start DAC?</text>
 <wire x1="137.16" y1="88.9" x2="137.16" y2="172.72" width="0.6096" layer="97"/>
 <text x="144.272" y="166.624" size="1.778" layer="150">CHANGE: XC6206P302MR 3V LDO, 90 deg rotated
 or other 3V</text>
-<text x="172.72" y="124.46" size="1.778" layer="150">Clock feedback?</text>
+<text x="172.72" y="124.46" size="1.778" layer="97">Clock feedback</text>
 <wire x1="139.7" y1="101.6" x2="254" y2="101.6" width="0.6096" layer="97"/>
 <text x="36.576" y="43.434" size="2.54" layer="91">+</text>
 <wire x1="137.16" y1="86.36" x2="137.16" y2="5.08" width="0.6096" layer="97"/>
 <text x="215.9" y="132.08" size="1.9304" layer="150">Check if 3V ok?</text>
 <text x="182.88" y="45.72" size="1.9304" layer="97">Generate 1.5V
 from 3V</text>
+<text x="49.53" y="53.594" size="1.4224" layer="97" rot="R90">Vref = 0.5V</text>
+<text x="76.454" y="44.45" size="1.4224" layer="97" rot="R180">Input span = 1V</text>
+<text x="16.51" y="142.748" size="1.4224" layer="97">Input span = 500mV
+(for gain = 2, Vref = 0.5V)</text>
+<text x="206.756" y="93.726" size="1.4224" layer="97" rot="R180">Feedback for gain = 2</text>
 </plain>
 <instances>
 <instance part="FRAME1" gate="G$1" x="0" y="0"/>
@@ -16252,14 +16264,14 @@ supply</text>
 <wire x1="20.32" y1="106.68" x2="20.32" y2="119.38" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="FPGA_T9" class="0">
+<net name="FPGA_R9" class="0">
 <segment>
 <pinref part="JP7" gate="A" pin="1"/>
 <wire x1="114.3" y1="167.64" x2="104.14" y2="167.64" width="0.1524" layer="91"/>
 <label x="104.14" y="167.64" size="1.016" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
-<net name="GCLK3" class="0">
+<net name="GCLK2" class="0">
 <segment>
 <pinref part="JP7" gate="A" pin="2"/>
 <wire x1="114.3" y1="165.1" x2="104.14" y2="165.1" width="0.1524" layer="91"/>
@@ -16289,7 +16301,7 @@ supply</text>
 <junction x="167.64" y="82.55"/>
 </segment>
 </net>
-<net name="GCLK0" class="0">
+<net name="GCLK28" class="0">
 <segment>
 <pinref part="JP7" gate="A" pin="3"/>
 <wire x1="114.3" y1="162.56" x2="104.14" y2="162.56" width="0.1524" layer="91"/>
@@ -16584,10 +16596,10 @@ but this is an MCU pin</text>
 <text x="90.932" y="137.16" size="0.8128" layer="97" align="center-right">R7</text>
 <text x="91.186" y="142.24" size="0.8128" layer="97" align="center-right">M7</text>
 <text x="91.186" y="144.526" size="0.8128" layer="97" align="center-right">P7</text>
-<text x="114.3" y="111.76" size="1.6764" layer="150" rot="R90" align="center-right">ADC here?</text>
 <wire x1="139.7" y1="172.72" x2="139.7" y2="10.16" width="0.8128" layer="97"/>
 <wire x1="142.24" y1="109.22" x2="254" y2="109.22" width="0.8128" layer="97"/>
 <text x="76.962" y="121.92" size="0.6096" layer="97" rot="R180" align="center-right">diff. adapter</text>
+<text x="90.932" y="124.714" size="0.8128" layer="97" align="center-right">R9</text>
 </plain>
 <instances>
 <instance part="FRAME4" gate="G$1" x="0" y="0"/>
@@ -16773,25 +16785,18 @@ but this is an MCU pin</text>
 <pinref part="CON2" gate="_IO_CD" pin="IO_D25"/>
 </segment>
 </net>
-<net name="FPGA_T9" class="0">
+<net name="GCLK2" class="0">
 <segment>
-<wire x1="109.22" y1="119.38" x2="121.92" y2="119.38" width="0.1524" layer="91"/>
-<label x="121.92" y="119.38" size="1.016" layer="95" xref="yes"/>
-<pinref part="CON2" gate="_IO_CD" pin="IO_D22"/>
+<pinref part="CON2" gate="_IO_CD" pin="IO_C25"/>
+<wire x1="109.22" y1="132.08" x2="121.92" y2="132.08" width="0.1524" layer="91"/>
+<label x="121.92" y="132.08" size="0.8128" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="GCLK3" class="0">
+<net name="GCLK28" class="0">
 <segment>
-<wire x1="109.22" y1="127" x2="121.92" y2="127" width="0.1524" layer="91"/>
-<label x="121.92" y="127" size="1.016" layer="95" xref="yes"/>
-<pinref part="CON2" gate="_IO_CD" pin="IO_C24"/>
-</segment>
-</net>
-<net name="GCLK0" class="0">
-<segment>
-<wire x1="109.22" y1="129.54" x2="121.92" y2="129.54" width="0.1524" layer="91"/>
-<label x="121.92" y="129.54" size="1.016" layer="95" xref="yes"/>
-<pinref part="CON2" gate="_IO_CD" pin="IO_D24"/>
+<pinref part="CON2" gate="_IO_CD" pin="IO_D26"/>
+<wire x1="109.22" y1="139.7" x2="121.92" y2="139.7" width="0.1524" layer="91"/>
+<label x="121.92" y="139.7" size="0.8128" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="GPIO0" class="0">
@@ -17055,6 +17060,104 @@ but this is an MCU pin</text>
 <pinref part="CON2" gate="_IO_AB" pin="IO_B10"/>
 <wire x1="55.88" y1="124.46" x2="55.88" y2="121.92" width="0.1524" layer="91"/>
 <wire x1="55.88" y1="121.92" x2="60.96" y2="121.92" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="ADC_D2" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_C19"/>
+<wire x1="109.22" y1="101.6" x2="121.92" y2="101.6" width="0.1524" layer="91"/>
+<label x="121.92" y="101.6" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_D0" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_C15"/>
+<wire x1="109.22" y1="96.52" x2="121.92" y2="96.52" width="0.1524" layer="91"/>
+<label x="121.92" y="96.52" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_D1" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_D15"/>
+<wire x1="109.22" y1="99.06" x2="121.92" y2="99.06" width="0.1524" layer="91"/>
+<label x="121.92" y="99.06" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_D3" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_D19"/>
+<wire x1="109.22" y1="104.14" x2="121.92" y2="104.14" width="0.1524" layer="91"/>
+<label x="121.92" y="104.14" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_D4" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_C20"/>
+<wire x1="109.22" y1="106.68" x2="121.92" y2="106.68" width="0.1524" layer="91"/>
+<label x="121.92" y="106.68" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_D5" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_D20"/>
+<wire x1="109.22" y1="109.22" x2="121.92" y2="109.22" width="0.1524" layer="91"/>
+<label x="121.92" y="109.22" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_D6" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_C21"/>
+<wire x1="109.22" y1="111.76" x2="121.92" y2="111.76" width="0.1524" layer="91"/>
+<label x="121.92" y="111.76" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_D7" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_D21"/>
+<wire x1="109.22" y1="114.3" x2="121.92" y2="114.3" width="0.1524" layer="91"/>
+<label x="121.92" y="114.3" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_D8" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_C22"/>
+<wire x1="109.22" y1="116.84" x2="121.92" y2="116.84" width="0.1524" layer="91"/>
+<label x="121.92" y="116.84" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_CLK_FB" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_C24"/>
+<wire x1="109.22" y1="127" x2="121.92" y2="127" width="0.1524" layer="91"/>
+<label x="121.92" y="127" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_CLK" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_D24"/>
+<wire x1="109.22" y1="129.54" x2="121.92" y2="129.54" width="0.1524" layer="91"/>
+<label x="121.92" y="129.54" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="FPGA_R9" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_D23"/>
+<wire x1="109.22" y1="124.46" x2="121.92" y2="124.46" width="0.1524" layer="91"/>
+<label x="121.92" y="124.46" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_D9" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_D22"/>
+<wire x1="109.22" y1="119.38" x2="121.92" y2="119.38" width="0.1524" layer="91"/>
+<label x="121.92" y="119.38" size="0.8128" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="ADC_OR" class="0">
+<segment>
+<pinref part="CON2" gate="_IO_CD" pin="IO_C23"/>
+<wire x1="109.22" y1="121.92" x2="121.92" y2="121.92" width="0.1524" layer="91"/>
+<label x="121.92" y="121.92" size="0.8128" layer="95" xref="yes"/>
 </segment>
 </net>
 </nets>
