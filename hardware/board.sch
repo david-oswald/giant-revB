@@ -13273,6 +13273,10 @@ https://www.ti.com/product/THS3062</description>
 <part name="SUPPLY43" library="supply2" deviceset="+5V/3" device="" value="+3V3/3"/>
 <part name="SUPPLY1" library="supply2" deviceset="+5V/1" device="" value="+3V3/1"/>
 <part name="SUPPLY3" library="supply2" deviceset="+5V/1" device="" value="+3V3/1"/>
+<part name="R10" library="rcl" deviceset="R-EU_" device="R0805" value="0"/>
+<part name="R8" library="rcl" deviceset="R-EU_" device="R0805" value="0"/>
+<part name="SUPPLY4" library="supply2" deviceset="+5V/1" device="" value="+3V3/1"/>
+<part name="SUPPLY17" library="supply2" deviceset="+5V/2" device="" value="+3V3/2"/>
 </parts>
 <sheets>
 <sheet>
@@ -14385,14 +14389,14 @@ supply</text>
 <wire x1="20.32" y1="106.68" x2="20.32" y2="119.38" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GCLK3" class="0">
+<net name="FPGA_T9" class="0">
 <segment>
 <pinref part="JP7" gate="A" pin="1"/>
 <wire x1="114.3" y1="167.64" x2="104.14" y2="167.64" width="0.1524" layer="91"/>
 <label x="104.14" y="167.64" size="1.016" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
-<net name="GCLK28" class="0">
+<net name="GCLK3" class="0">
 <segment>
 <pinref part="JP7" gate="A" pin="2"/>
 <wire x1="114.3" y1="165.1" x2="104.14" y2="165.1" width="0.1524" layer="91"/>
@@ -14422,7 +14426,7 @@ supply</text>
 <junction x="167.64" y="82.55"/>
 </segment>
 </net>
-<net name="GCLK2" class="0">
+<net name="GCLK0" class="0">
 <segment>
 <pinref part="JP7" gate="A" pin="3"/>
 <wire x1="114.3" y1="162.56" x2="104.14" y2="162.56" width="0.1524" layer="91"/>
@@ -14678,8 +14682,7 @@ but this is an MCU pin</text>
 <text x="77.724" y="132.08" size="0.8128" layer="97" align="center-right">B14</text>
 <text x="77.724" y="129.794" size="0.8128" layer="97" align="center-right">A13</text>
 <text x="77.724" y="127" size="0.8128" layer="97" align="center-right">C13</text>
-<text x="79.248" y="124.46" size="0.8128" layer="97" align="center-right">A12</text>
-<text x="55.626" y="123.444" size="0.8128" layer="150" align="center-right">check, VREF!</text>
+<text x="85.598" y="121.92" size="0.8128" layer="97" align="center-right">B12</text>
 <text x="79.248" y="116.84" size="0.8128" layer="97" align="center-right">E11</text>
 <text x="79.248" y="114.3" size="0.8128" layer="97" align="center-right">D11</text>
 <text x="79.248" y="111.76" size="0.8128" layer="97" align="center-right">F10</text>
@@ -14714,7 +14717,6 @@ but this is an MCU pin</text>
 <text x="90.678" y="119.634" size="0.8128" layer="97" align="center-right">T9</text>
 <text x="90.932" y="127" size="0.8128" layer="97" align="center-right">M9</text>
 <text x="90.932" y="129.54" size="0.8128" layer="97" align="center-right">T8</text>
-<text x="119.126" y="120.396" size="0.8128" layer="150" align="center-right">not GCLK</text>
 <text x="90.932" y="134.62" size="0.8128" layer="97" align="center-right">P8</text>
 <text x="90.932" y="137.16" size="0.8128" layer="97" align="center-right">R7</text>
 <text x="91.186" y="142.24" size="0.8128" layer="97" align="center-right">M7</text>
@@ -14722,6 +14724,7 @@ but this is an MCU pin</text>
 <text x="114.3" y="111.76" size="1.6764" layer="150" rot="R90" align="center-right">ADC here?</text>
 <wire x1="139.7" y1="172.72" x2="139.7" y2="10.16" width="0.8128" layer="97"/>
 <wire x1="142.24" y1="109.22" x2="254" y2="109.22" width="0.8128" layer="97"/>
+<text x="76.962" y="121.92" size="0.6096" layer="97" rot="R180" align="center-right">diff. adapter</text>
 </plain>
 <instances>
 <instance part="FRAME4" gate="G$1" x="0" y="0"/>
@@ -14735,6 +14738,10 @@ but this is an MCU pin</text>
 <instance part="SUPPLY40" gate="G$1" x="195.58" y="134.62" rot="R180"/>
 <instance part="SUPPLY42" gate="G$1" x="200.66" y="119.38" rot="R180"/>
 <instance part="SUPPLY43" gate="G$1" x="198.12" y="127" rot="R180"/>
+<instance part="R10" gate="G$1" x="205.74" y="132.08" rot="R90"/>
+<instance part="R8" gate="G$1" x="213.36" y="132.08" rot="R90"/>
+<instance part="SUPPLY4" gate="G$1" x="209.042" y="124.46" rot="R180"/>
+<instance part="SUPPLY17" gate="G$1" x="219.202" y="124.46" rot="R180"/>
 </instances>
 <busses>
 <bus name="SW1,SW2,PIN8,PIN4,IO,CLK_SC,PIN6,RST,SHDN">
@@ -14815,6 +14822,11 @@ but this is an MCU pin</text>
 <pinref part="CON2" gate="_PWR" pin="3.3V_A15"/>
 <wire x1="193.04" y1="142.24" x2="193.04" y2="144.78" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="R10" gate="G$1" pin="1"/>
+<pinref part="SUPPLY4" gate="G$1" pin="+5V/1"/>
+<wire x1="209.042" y1="127" x2="205.74" y2="127" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="VPP" class="0">
 <segment>
@@ -14835,6 +14847,11 @@ but this is an MCU pin</text>
 <pinref part="SUPPLY42" gate="G$1" pin="+5V/2"/>
 <pinref part="CON2" gate="_PWR" pin="3.3V_D18"/>
 <wire x1="200.66" y1="121.92" x2="200.66" y2="144.78" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="R8" gate="G$1" pin="1"/>
+<wire x1="213.36" y1="127" x2="219.202" y2="127" width="0.1524" layer="91"/>
+<pinref part="SUPPLY17" gate="G$1" pin="+5V/2"/>
 </segment>
 </net>
 <net name="LED1_PIN" class="0">
@@ -14893,21 +14910,21 @@ but this is an MCU pin</text>
 <pinref part="CON2" gate="_IO_CD" pin="IO_D25"/>
 </segment>
 </net>
-<net name="GCLK3" class="0">
+<net name="FPGA_T9" class="0">
 <segment>
 <wire x1="109.22" y1="119.38" x2="121.92" y2="119.38" width="0.1524" layer="91"/>
 <label x="121.92" y="119.38" size="1.016" layer="95" xref="yes"/>
 <pinref part="CON2" gate="_IO_CD" pin="IO_D22"/>
 </segment>
 </net>
-<net name="GCLK28" class="0">
+<net name="GCLK3" class="0">
 <segment>
 <wire x1="109.22" y1="127" x2="121.92" y2="127" width="0.1524" layer="91"/>
 <label x="121.92" y="127" size="1.016" layer="95" xref="yes"/>
 <pinref part="CON2" gate="_IO_CD" pin="IO_C24"/>
 </segment>
 </net>
-<net name="GCLK2" class="0">
+<net name="GCLK0" class="0">
 <segment>
 <wire x1="109.22" y1="129.54" x2="121.92" y2="129.54" width="0.1524" layer="91"/>
 <label x="121.92" y="129.54" size="1.016" layer="95" xref="yes"/>
@@ -15098,13 +15115,6 @@ but this is an MCU pin</text>
 <label x="25.4" y="142.24" size="0.6096" layer="95" rot="R90" xref="yes"/>
 </segment>
 </net>
-<net name="RST" class="0">
-<segment>
-<pinref part="CON2" gate="_IO_AB" pin="IO_A10"/>
-<wire x1="60.96" y1="124.46" x2="15.24" y2="124.46" width="0.1524" layer="91"/>
-<label x="48.26" y="124.46" size="0.6096" layer="95" rot="R90" xref="yes"/>
-</segment>
-</net>
 <net name="DB5" class="0">
 <segment>
 <pinref part="CON2" gate="_IO_AB" pin="IO_A24"/>
@@ -15154,6 +15164,34 @@ but this is an MCU pin</text>
 <pinref part="CON2" gate="_IO_AB" pin="IO_A9"/>
 <wire x1="60.96" y1="129.54" x2="15.24" y2="129.54" width="0.1524" layer="91"/>
 <label x="43.18" y="129.54" size="0.6096" layer="95" rot="R90" xref="yes"/>
+</segment>
+</net>
+<net name="N$1" class="0">
+<segment>
+<pinref part="CON2" gate="_PWR" pin="VCCO_AB_A17"/>
+<pinref part="CON2" gate="_PWR" pin="VCCO_AB_B17"/>
+<wire x1="205.74" y1="144.78" x2="208.28" y2="144.78" width="0.1524" layer="91"/>
+<wire x1="205.74" y1="144.78" x2="205.74" y2="137.16" width="0.1524" layer="91"/>
+<junction x="205.74" y="144.78"/>
+<pinref part="R10" gate="G$1" pin="2"/>
+</segment>
+</net>
+<net name="N$2" class="0">
+<segment>
+<pinref part="CON2" gate="_PWR" pin="VCCO_CD_C16"/>
+<pinref part="CON2" gate="_PWR" pin="VCCO_CD_D16"/>
+<wire x1="213.36" y1="144.78" x2="215.9" y2="144.78" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="144.78" x2="213.36" y2="137.16" width="0.1524" layer="91"/>
+<junction x="213.36" y="144.78"/>
+<pinref part="R8" gate="G$1" pin="2"/>
+</segment>
+</net>
+<net name="RST" class="0">
+<segment>
+<wire x1="15.24" y1="124.46" x2="55.88" y2="124.46" width="0.1524" layer="91"/>
+<pinref part="CON2" gate="_IO_AB" pin="IO_B10"/>
+<wire x1="55.88" y1="124.46" x2="55.88" y2="121.92" width="0.1524" layer="91"/>
+<wire x1="55.88" y1="121.92" x2="60.96" y2="121.92" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
