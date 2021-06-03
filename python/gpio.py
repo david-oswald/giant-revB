@@ -20,7 +20,7 @@ class gpio:
 
     def disable(self):
         ''' Disable GPIO'''
-        logging.info("Disabling GPIO...")
+        logging.debug("Disabling GPIO...")
         fpga = spartan6_fpga.getInstance()
         fpga.setBitRegister(self.CONTROL_REG, Register_Bits.GPIO_ENABLE.value, False)
         
@@ -38,7 +38,7 @@ class gpio:
         if pin >= 8:
             raise ValueError("Selected pin does not exist")
             
-        logging.info("Setting internal GPIO {} -> {}".format(pin, value))
+        logging.debug("Setting internal GPIO {} -> {}".format(pin, value))
         fpga = spartan6_fpga.getInstance()
         fpga.setBitRegister(Registers.GPIO_OUTPUTS.value, pin, value)
         
@@ -53,10 +53,10 @@ class gpio:
         
         # Need to write in reverse order
         for select in reversed(self.settings):
-            logging.info("Setting GPIO {} -> mode {}".format(pin, select)) 
+            logging.debug("Setting GPIO {} -> mode {}".format(pin, select)) 
             fpga.writeRegister(self.SELECT_REG, select)
             pin = pin - 1
             
         # Enable
-        logging.info("Enabling GPIO...")
+        logging.debug("Enabling GPIO...")
         fpga.setBitRegister(self.CONTROL_REG, Register_Bits.GPIO_ENABLE.value, True)

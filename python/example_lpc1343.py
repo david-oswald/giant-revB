@@ -5,7 +5,9 @@ import serial as ser
 import uu
 from glitcher import glitcher
 import logging
-from fpga import Registers, Register_Bits
+from fpga import *
+from gpio import gpio
+
 
 PROTECTED = "prot"
 UNPROTECTED = "unprot"
@@ -105,6 +107,13 @@ def check_protected(serial, khz, debugPrint):
 def close_port(serial):
     serial.close()
 
+## Example success:
+## v = 0.500000, w = 260, o = 52900, repeat = 1
+### !!! Yeah, unprotected !!!
+## 'R 0 4\r0\r\n$_!\\`$!`0\r\n299\r\n'
+## WOOT!
+## v = 0.500000, w = 260, o = 52900
+
 if __name__=="__main__":
     port = open_port(SER_PORT, 115200)
     
@@ -120,32 +129,38 @@ if __name__=="__main__":
     glitcher.dac.setTestModeEnabled(0)
     glitcher.dac.setRfidModeEnabled(0)
     
-    # Setup trigger
-    glitcher.dac.setTriggerEnableState(Register_Bits.FI_TRIGGER_CONTROL_DAC_POWER.value, True)
+    io = gpio()
+    io.setInternalOutput(GPIO_Pins.GPIO0.value, False);
+    io.setPinMux(GPIO_Pins.GPIO6.value, GPIO_Select_Bits.GPIO_OUTPUT_0.value)
+    io.updateMuxState()
 
+    # Setup trigger on this internal output (which is also on GPIO1_6)
+    glitcher.dac.setTriggerEnableState(Register_Bits.FI_TRIGGER_GPIO_OUTPUT_0.value, True)
+    
     # Set the fault voltage, normal voltage, off voltage
     glitcher.set_voltages(0.5, 1.9, 0)
+    glitcher.dac.setEnabled(True)
     
     # Limits
     
     # Offsets
-    offset_start = 50000
+    offset_start = 52900
     #offset_end = 54000
-    offset_end = 150000
+    offset_end = 53200
     offset_step = 100
     
     # Width range
-    w_start = 80
+    w_start = 100
     w_end = 270
     w_step = 10
     
     # Voltage range
-    v_start = 0.4
-    v_end = 0.8
-    v_step = 0.2
+    v_start = 0.2
+    v_end = 0.7
+    v_step = 0.1
     
     # Repeat each attempt how many times?
-    repeat = 1
+    repeat = 4
     
     # Loop state
     run = True
@@ -157,6 +172,11 @@ if __name__=="__main__":
     glitcher.set_voltages(v, 1.75, 0)
     
     while run:
+        
+        # Bring uc into reset
+        io.setInternalOutput(GPIO_Pins.GPIO0.value, False);
+        time.sleep(0.05)
+        
         # Clean up any previous pulses
         glitcher.dac.clearPulses()
     
@@ -166,11 +186,11 @@ if __name__=="__main__":
         # Arm the fault
         glitcher.dac.arm()
         
-        # Reset uc - this will also trigger the glitch
-        glitcher.dac.setEnabled(False)
-        time.sleep(.02)
-        glitcher.dac.setEnabled(True)
+        # Bring uc out of reset - this will also trigger the glitch
+        io.setInternalOutput(GPIO_Pins.GPIO0.value, True);
+        time.sleep(0.05)
         
+        # Now check if we succeeded
         status = check_protected(port, 12000, False);
         
         if status == False:
