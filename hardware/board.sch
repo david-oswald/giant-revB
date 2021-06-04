@@ -16541,14 +16541,6 @@ supply</text>
 <sheet>
 <plain>
 <text x="167.64" y="137.16" size="1.778" layer="97" rot="R90">Input from power supply</text>
-<text x="147.32" y="83.82" size="1.6764" layer="150">TODO:
-* GPIO2
-* ADC
-* check everything
-* check CLK pins
-* check GPI0 uC pins
-
-Add notes where useful</text>
 <text x="30.48" y="147.32" size="1.016" layer="97" rot="R180" align="center-right">SC_IO was here in adapter version,
 but this is an MCU pin</text>
 <text x="60.198" y="130.556" size="0.6096" layer="97" align="center-right">diff. adapter</text>
