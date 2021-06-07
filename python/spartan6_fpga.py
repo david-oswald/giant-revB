@@ -4,6 +4,7 @@
 import usb.core
 import usb.util
 import logging, sys
+import os
 
 from fpga import Commands, Registers, Register_Bits, FPGA_Vars
 
@@ -62,12 +63,13 @@ class spartan6_fpga:
             for intf in cfg:
                 logging.debug("Device config: ")
                 logging.debug(cfg)
-                # TODO: Check for windows
-                #if self.dev.is_kernel_driver_active(intf.bInterfaceNumber) and false:
-                #    try:
-                #        self.dev.detach_kernel_driver(intf.bInterfaceNumber)
-                #    except usb.core.USBError as e:
-                #        sys.exit("Could not detach kernel driver")
+                
+                # Check for windows
+                if os.name != "nt" and self.dev.is_kernel_driver_active(intf.bInterfaceNumber):
+                    try:
+                        self.dev.detach_kernel_driver(intf.bInterfaceNumber)
+                    except usb.core.USBError as e:
+                        sys.exit("Could not detach kernel driver")
         self.dev.reset()
         # Configure device with default
         self.dev.set_configuration()

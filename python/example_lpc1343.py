@@ -1,4 +1,32 @@
+###############################################################################
+# This example shows how to glitch the bootloader of an LPC1343 to bypass CRP
 # Partially based on https://github.com/toothlessco/arty-glitcher/blob/master/python/assignment5.py
+# The example uses the LPC-P1343 from Olimex (https://www.olimex.com/Products/ARM/NXP/LPC-P1343/)
+# For this to work, the following connections and changes are needed:
+#
+#  - cut the 3.3V_CORE and 3.3V_IO jumpers, connect the chip side with a wire,
+#    and then connect them to the glitch output
+#
+#  - remove C1 and C4 (decoupling caps)
+#   
+#  - close the BLD_E jumper and connect P0_2 to GND to enter the bootloader
+# 
+#  - connect the bootloader RX/TX pins (on UEXT) to a USB-to-serial adapter 
+#    (e.g. a CP2101-based one)
+#
+#  - connect 3V3 and GND from the USB-to-serial to the respective pins on the
+#    UEXT connector
+#
+#  - connect the RST pin to the GIAnT (I use IO1 pin 6 here)
+#
+# Example success:
+# v = 0.500000, w = 260, o = 52900, repeat = 1
+# !!! Yeah, unprotected !!!
+# 'R 0 4\r0\r\n$_!\\`$!`0\r\n299\r\n'
+# WOOT!
+# v = 0.500000, w = 260, o = 52900
+#
+###############################################################################
 
 import time
 import serial as ser
@@ -8,14 +36,16 @@ import logging
 from fpga import *
 from gpio import gpio
 
+# Change this depending on your setup
+SER_PORT = "com7"
 
+# Fixed constants
 PROTECTED = "prot"
 UNPROTECTED = "unprot"
 EOL = b"\r\n"
-SER_PORT = "com7"
 
 def open_port(serial, baud):
-    print(f"Serial communication opened on port {serial} at {baud} baud.")
+    logging.info(f"Serial communication opened on port {serial} at {baud} baud.")
     return ser.Serial(serial, baud, timeout=0.2)
 
 def expect_read(serial, expected):
@@ -52,7 +82,7 @@ def read_address(serial, address, length):
 
 def check_protected(serial, khz, debugPrint):
 
-    ################################## Syncing the Device ############################################
+    # Syncing the device
     serial.write(b"?")
     
     if debugPrint:
@@ -92,7 +122,7 @@ def check_protected(serial, khz, debugPrint):
     if debugPrint:
         print("Communications setup with target device succeeded.")
 
-    ################################## Check if protected ############################################
+    # Check if protected
     r = read_address(serial, 0, 4)
     
     if r is None:
@@ -107,23 +137,12 @@ def check_protected(serial, khz, debugPrint):
 def close_port(serial):
     serial.close()
 
-## Example success:
-## v = 0.500000, w = 260, o = 52900, repeat = 1
-### !!! Yeah, unprotected !!!
-## 'R 0 4\r0\r\n$_!\\`$!`0\r\n299\r\n'
-## WOOT!
-## v = 0.500000, w = 260, o = 52900
 
 if __name__=="__main__":
     port = open_port(SER_PORT, 115200)
     
     logging.basicConfig(level = logging.INFO)
-    
-    ## FIXME: Glitcher currently has different options than bitstream
-    ##        because bitstream is based on outdated files
-    
-    ## FIXME: better use reset pin here instead of power down
-    
+
     glitcher = glitcher()
     glitcher.reset_fpga() 
     glitcher.dac.setTestModeEnabled(0)
@@ -145,7 +164,6 @@ if __name__=="__main__":
     
     # Offsets
     offset_start = 52900
-    #offset_end = 54000
     offset_end = 53200
     offset_step = 100
     
@@ -158,6 +176,7 @@ if __name__=="__main__":
     v_start = 0.2
     v_end = 0.7
     v_step = 0.1
+    v_normal = 1.75
     
     # Repeat each attempt how many times?
     repeat = 4
@@ -169,7 +188,7 @@ if __name__=="__main__":
     v = v_start
     r = 0
     
-    glitcher.set_voltages(v, 1.75, 0)
+    glitcher.set_voltages(v, v_normal, 0)
     
     while run:
         
@@ -212,7 +231,7 @@ if __name__=="__main__":
                 offset = offset_start
                 w = w_start
                 v = v + v_step
-                glitcher.set_voltages(v, 1.75, 0)
+                glitcher.set_voltages(v, v_normal, 0)
             else:
                 run = False
             
