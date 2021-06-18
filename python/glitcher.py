@@ -2,6 +2,7 @@ from spartan6_fpga import spartan6_fpga
 from fpga import *
 from dac import dac
 from gpio import gpio
+from utx import utx, ClockMode, OutputMode
 import logging
 import time
 import traceback
@@ -96,7 +97,6 @@ class glitcher:
 
 
     def test_gpio(self):
-        self.reset_fpga()
         io = gpio()
         
         # Mux a constant 1 on GPIO1_6
@@ -149,6 +149,27 @@ class glitcher:
         # This should trigger
         io.setInternalOutput(GPIO_Pins.GPIO0.value, True);
 
+    def test_utx(self):
+        
+        io = gpio()
+        tx = utx()
+        
+        # First shortly a high level
+        io.setPinMux(GPIO_Pins.GPIO6.value, GPIO_Select_Bits.VALUE_1.value)
+        io.updateMuxState()
+        time.sleep(1)
+        
+        # Then mux UTX out to pin 5
+        io.setPinMux(GPIO_Pins.GPIO6.value, GPIO_Select_Bits.UTX_DATA_OUT.value)
+        io.updateMuxState()
+        time.sleep(1)
+        
+        # Then push some data into UTX
+        data = [0x12, 0xff, 0x00, 0xAA, 0xaa, 0xaa, 0xaf]
+        tx.setClockDivider(9)
+        tx.setOutputMode(OutputMode.Zero.value)
+        tx.writeBuffer(data, 0)
+        tx.send()
 
     def clear_pulses(self):
         '''Clears all pulses in the dac'''
@@ -168,8 +189,10 @@ if __name__ == "__main__":
     glitcher = glitcher()
 
     try:
-        glitcher.test_gpio()
-        glitcher.test_fi()
+        glitcher.reset_fpga()
+        # glitcher.test_gpio()
+        glitcher.test_utx()
+        # glitcher.test_fi()
     except Exception as e:
         logging.error(traceback.format_exc())
         
