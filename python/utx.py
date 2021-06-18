@@ -88,6 +88,13 @@ class utx:
             
         return True
     
+    
+    def writeBitarray(self, bits):
+        valid = len(bits)
+        logging.info("Will write " + str(valid) + " bits")
+        b = bytearray(bits.tobytes())
+        self.writeBuffer(b, valid)
+        
     def writeBuffer(self, data, valid):
         ''' Push a whole buffer into UTX '''
         
