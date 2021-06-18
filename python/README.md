@@ -69,6 +69,7 @@ v = 0.500000, w = 260, o = 52900
 
 ### Further planned examples
 
+ * General built-in support for at least UART and SWD (for SWD see here: https://research.kudelskisecurity.com/2019/07/31/swd-part-2-the-mem-ap/)
  * ESP32: https://limitedresults.com/2019/09/pwn-the-esp32-secure-boot/
  * nRF52: https://limitedresults.com/2021/03/the-pocketglitcher/ and https://github.com/pd0wm/airtag-dump
  * STM32F0: https://www.usenix.org/system/files/conference/woot17/woot17-paper-obermaier.pdf

@@ -159,7 +159,7 @@ class Register_Bits(Enum):
     UTX_CONTROL_OUT_MODE_0 = 3
     UTX_CONTROL_OUT_MODE_1 = 4
     UTX_CONTROL_ONE_TO_Z = 5
-    UTX_CONTROL_DISABLE_GPIO = 6
+    UTX_CONTROL_DISCONNECT_TX_URX = 6
     UTX_CONTROL_ENABLE_UTIMING = 7
 
     # Universal TX clock control register bits
@@ -310,11 +310,11 @@ class GPIO_Pins(Enum):
     GPIO7 = 7
     
 class GPIO_Select_Bits(Enum):
-    UTX_DATA_OUT = 0
+    UTX_DATA_OUT_VALID = 0
     FI_TRIGGER = 1
     FI_INJECT_FAULT = 2
     UTX_START = 3,
-    URX_DATA_IN = 4,
+    URX_DATA_IN_WITH_TX = 4,
     DDR_DMA_START = 5
     SC_DATA_SENDING_TRIGGER = 6
     SC_DATA_SENT_TRIGGER = 7
@@ -329,6 +329,8 @@ class GPIO_Select_Bits(Enum):
     GPIO_OUTPUT_1 = 16
     GPIO_OUTPUT_2 = 17
     GPIO_OUTPUT_3 = 18
+    UTX_DATA_OUT = 19
+    FI_EXTERNAL_TRIGGER_IN = 20
     VALUE_0 = 29
     VALUE_1 = 30
     VALUE_Z = 31

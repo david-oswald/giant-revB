@@ -235,8 +235,12 @@ architecture behavioral of universal_tx_core is
 begin
 	-- Outputs
 	packet_count <= "000" & std_logic_vector(fifo_bc_count);
-	clk_tx_int_prep  <= not clk when tx_clk_divide = "00000000" else
-	                    not clk_tx_int;
+	
+	-- CHECK if this change is OK
+	--clk_tx_int_prep  <= not clk when tx_clk_divide = "00000000" else
+	--                    not clk_tx_int;
+						
+	clk_tx_int_prep  <= not clk_tx_int;
 	
 	clk_tx <= clk_tx_int_prep when data_valid = '1' else
 			  '0';

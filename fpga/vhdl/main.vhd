@@ -109,10 +109,15 @@ entity main is
 			
 		-- user I/O pins
 		-- This is the GPIO1 port on the new FPGA board
-		gpio1 : inout std_logic_vector(7 downto 0)
+		gpio1 : inout std_logic_vector(7 downto 0);
 		
 		-- GPIO2: to be done
 		-- gpio2 : inout std_logic_vector(7 downto 0)
+		
+		-- Clk pins
+		clk_r9 : out std_logic;
+		clk_2  : out std_logic;
+		clk_28 : out std_logic
 	);
 end main;
 
@@ -500,6 +505,13 @@ architecture behavioral of main is
 			select_in_w_en : std_logic
 		);
 	end component;
+
+	component BUFG
+		port(
+			I: in STD_LOGIC; 
+			O: out STD_LOGIC
+		);
+	end component;
 	
 	-- signals
    
@@ -670,6 +682,7 @@ begin
 	-- components
 	
 	-- Universal triggers
+	-- Both inputs are connected to the internal urx_data_in pin
 	
 	-- Register mapping:
 	-- utrig1_status       (r)  : 27
@@ -1455,13 +1468,15 @@ begin
 	-- Output register
 	gpio_outputs <= register_file_writable(52);
 	
-	-- UTX pins
+	-- UTX pin - 'Z' when no valid data (useful for tristate busses)
 	gpio_fpga_o(0) <= utx_data_out when utx_data_out_valid = '1' else 'Z';
 	gpio_fpga_io_output(0) <= utx_data_out_valid;
 	
+	-- Internal, combined trigger (out)
 	gpio_fpga_o(1) <= fi_trigger;
 	gpio_fpga_io_output(1) <= '1';
 	
+	-- Fault injection point (out)
 	gpio_fpga_o(2) <= fi_inject_fault;
 	gpio_fpga_io_output(2) <= '1';
 	
@@ -1469,7 +1484,7 @@ begin
 	gpio_fpga_o(3) <= utx_start;
 	gpio_fpga_io_output(3) <= '1';
 	
-	-- URX/TX pin
+	-- Combined URX/TX pin - TX can be disconnected by bit 6 in UTX control for separate RX/TX pins
 	urx_data_in <= gpio_fpga_i(4);
 	gpio_fpga_o(4) <= utx_data_out when utx_control(6) = '0' else 'Z';
 	gpio_fpga_io_output(4) <= not utx_control(6);
@@ -1495,6 +1510,9 @@ begin
 	gpio_fpga_o(10) <= not pic_v_pp_en;
 	gpio_fpga_io_output(10) <= '1';
 	
+	--
+	-- TODO: THIS NEEDS TO BE CHECKED AND MIGHT BE WRONG
+	--
 	gpio_fpga_o(11) <= pic_ispdat;
 	gpio_fpga_io_output(11) <= pic_ispdat_output;
 	
@@ -1522,6 +1540,14 @@ begin
 	gpio_fpga_o(18) <= gpio_outputs(3);
 	gpio_fpga_io_output(18) <= '1';
 	
+	-- Additional TX/RX modes
+	gpio_fpga_o(19) <= utx_data_out;
+	gpio_fpga_io_output(19) <= '1';
+	
+	-- FI external trigger in
+	fi_trigger_ext <= gpio_fpga_i(20);
+	gpio_fpga_io_output(20) <= '0';
+	
 	-- TODO: GPIO inputs
 	
 	-- Standard values
@@ -1532,11 +1558,35 @@ begin
 	gpio_fpga_io_output(30) <= '1';
 	
 	gpio_fpga_o(31) <= 'Z';
-	gpio_fpga_io_output(31) <= '0';
+	gpio_fpga_io_output(31) <= '1';
 	
 	-- Reset of pins
-	gpio_fpga_o(28 downto 19) <= (others => '0');
-	gpio_fpga_io_output(28 downto 19) <= (others => '0');
+	gpio_fpga_o(28 downto 21) <= (others => '0');
+	gpio_fpga_io_output(28 downto 21) <= (others => '0');
+	
+	
+	-- For now: tristate clk pins
+	clk_r9 <= 'Z';
+	clk_2 <= 'Z';
+	clk_28 <= utx_clk_tx;
+	
+	-- The UTX clock is always routed to CLK28
+	-- ODDR2_inst : ODDR2
+    -- generic map(
+    --   DDR_ALIGNMENT => "NONE", 
+    --   INIT => '0', 
+    --   SRTYPE => "SYNC"
+	-- ) 
+    -- port map (
+    --   Q => clk_28, -- 1-bit output data
+    --   C0 => utx_clk_tx, -- 1-bit clock input
+    --   C1 => not utx_clk_tx, -- 1-bit clock input
+    --   CE => '1',  -- 1-bit clock enable input
+    --   D0 => '1',   -- 1-bit data input (associated with C0)
+    --   D1 => '0',   -- 1-bit data input (associated with C1)
+    --   R => reset,    -- 1-bit reset input
+    --   S => '0'     -- 1-bit set input
+    -- );
 	
 	-- Processes
 	
