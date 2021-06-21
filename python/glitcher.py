@@ -2,7 +2,7 @@ from spartan6_fpga import spartan6_fpga
 from fpga import *
 from dac import dac
 from gpio import gpio
-from uart import uart
+from uart import uart, UartParity
 from utx import utx, ClockMode, OutputMode
 import logging
 import time
@@ -175,10 +175,12 @@ class glitcher:
     def test_uart(self):
         
         baudrate = 115200
-        s = uart(GPIO_Pins.GPIO6.value, GPIO_Pins.GPIO5.value, baudrate, 8, 0, 1)
+        s = uart(GPIO_Pins.GPIO6.value, GPIO_Pins.GPIO5.value, baudrate, 
+                 8, UartParity.NONE, 1)
+        
         time.sleep(1)
         
-        s.sendChar(0xFE)
+        s.sendBuffer([0xBB, 0xCC, 0xAA])
         
     def clear_pulses(self):
         '''Clears all pulses in the dac'''

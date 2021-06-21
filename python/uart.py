@@ -6,20 +6,30 @@ import logging
 import time
 from bitarray import bitarray
 from bitarray.util import ba2int
+from enum import Enum
+
+class UartParity(Enum):
+    NONE = 0
+    EVEN = 1
+    ODD = 2
     
 class uart:
     ''' UART based on UTX and URX'''
 
-    def __init__(self, txPin, rxPin, baudrate, nbits, nparity, nstop):
+    def __init__(self, txPin, rxPin, baudrate, nbits, parity, nstop):
         self.txPin = txPin
         self.rxPin = rxPin
         self.baudrate = baudrate
         self.nbits = nbits
-        self.nparity = nparity
+        self.parity = parity
         self.nstop = nstop
         self.configure()
     
     def configure(self):
+        
+        # check validity
+        if self.nstop < 0 or self.nstop > 2:
+            raise ValueError("Stop bits must be between 0 and 2")
         
         # Setup TX/RX pin
         io = gpio()
@@ -40,33 +50,58 @@ class uart:
         # UART is by default high
         tx.setOutputMode(OutputMode.One.value)
     
-    def sendChar(self, value):
+    def sendValue(self, value):
         d = self.makePacket(value)
         
         tx = utx()
         tx.writeBitarray(d)
         tx.send()
     
+    def sendBuffer(self, buffer):
+        tx = utx()
+        bits = bitarray(0)
+        
+        for val in buffer:
+             d = self.makePacket(val)
+             bits.extend(d)
+             
+        tx.writeBitarray(bits)    
+        tx.send()
+    
     def makePacket(self, value):
         ''' Prepare a single UART character packet '''
         
+        # Number of parity bits
+        nparity = 0
+        
+        if self.parity != UartParity.NONE:
+            nparity = 1
+        
         # Length in bit
-        length = 1 + self.nbits + self.nparity + self.nstop
+        length = 1 + self.nbits + nparity + self.nstop
         
         # Assemble it
         d = bitarray('0' * length)
         
         # Copy data bits - LSBit first
-        parity = 0
+        p = 0
         
         for i in range(0, self.nbits):
             b = (value >> i) & 0x1
             d[i + 1] = b
-            parity = parity ^ b 
+            p = p ^ b 
             
-        if self.nparity != 0:
-            d[1 + self.nbits] = parity
+        if self.parity == UartParity.ODD:
+            p = p ^ 1
+        
+        # Add parity bit
+        if self.parity != UartParity.NONE:
+            d[1 + self.nbits] = p
           
+        # Stop bits must be HIGH
+        for i in range(0, self.nstop):
+            d[1 + self.nbits + nparity + i] = 1
+        
         return d 
         
     def setClockMode(self, mode):
