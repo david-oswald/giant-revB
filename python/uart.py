@@ -2,6 +2,8 @@ from spartan6_fpga import spartan6_fpga
 from fpga import Registers, Register_Bits, GPIO_Pins, GPIO_Select_Bits
 from gpio import gpio
 from utx import utx, ClockMode, OutputMode
+from urx import urx
+from utrigger import utrigger, TriggerId, TriggerMode
 import logging
 import time
 from bitarray import bitarray
@@ -34,11 +36,14 @@ class uart:
         # Setup TX/RX pin
         io = gpio()
         io.setPinMux(self.txPin, GPIO_Select_Bits.UTX_DATA_OUT.value)
+        io.setPinMux(self.rxPin, GPIO_Select_Bits.URX_DATA_IN_WITH_TX.value)
         io.updateMuxState()
         logging.warning("RX not implemented yet")
         
         # Compute clock divider
-        div = round(50e6 / self.baudrate) - 1
+        fpga = spartan6_fpga.getInstance()
+        f = fpga.getFClkNormal()
+        div = round(f / self.baudrate) - 1
         logging.info("Using divider " + str(div) + " for baudrate " + str(self.baudrate))
         
         # Setup Utx
@@ -47,8 +52,33 @@ class uart:
         # Divider computed above
         tx.setClockDivider(div)
         
+        tx.setTxDisconnectFromRx(True)
+        
         # UART is by default high
         tx.setOutputMode(OutputMode.One.value)
+        
+        # Setup URX
+        rx = urx()
+        # TODO: rx.setStartViaUtiming(False)
+        rx.setClockDivider(div)
+        rx.setResyncFalling(False)
+        rx.setResyncRising(False)
+        rx.clear()
+        
+        # Trigger to start RX
+        trig1 = utrigger(TriggerId.Trigger1)
+        trig1.setDelay(0)
+        trig1.setHoldTime(0)
+        trig1.setEventMode(TriggerMode.Falling)
+        trig1.setOutputMode(TriggerMode.Rising)
+        
+        # Trigger to stop RX (for one character)
+        delay = self.getPacketLength() / float(self.baudrate)
+        trig2 = utrigger(TriggerId.Trigger2)
+        trig2.setDelay(delay)
+        trig2.setHoldTime(0)
+        trig2.setEventMode(TriggerMode.Falling)
+        trig2.setOutputMode(TriggerMode.Rising)
     
     def sendValue(self, value):
         d = self.makePacket(value)
@@ -56,6 +86,22 @@ class uart:
         tx = utx()
         tx.writeBitarray(d)
         tx.send()
+    
+    def waitForByte(self):
+        rx = urx()
+        trig1 = utrigger(TriggerId.Trigger1)
+        trig2 = utrigger(TriggerId.Trigger2)
+        
+        trig1.arm()
+        trig2.arm()
+        
+        while trig2.hasTriggered() == False:
+            time.sleep(1e-3)
+        
+        pkts = rx.getPacketCount()
+        p = rx.readPacket()
+        logging.info("Received {} packets, got one with {} bytes".format(pkts, len(p)))
+        logging.info("Data = " + ' '.join(map(bin, p)))
     
     def sendBuffer(self, buffer):
         tx = utx()
@@ -68,6 +114,18 @@ class uart:
         tx.writeBitarray(bits)    
         tx.send()
     
+    def getPacketLength(self):
+        ''' Get number of bits in a packet '''
+        nparity = 0
+        
+        if self.parity != UartParity.NONE:
+            nparity = 1
+        
+        # Length in bit
+        length = 1 + self.nbits + nparity + self.nstop
+        
+        return length
+        
     def makePacket(self, value):
         ''' Prepare a single UART character packet '''
         
@@ -78,7 +136,7 @@ class uart:
             nparity = 1
         
         # Length in bit
-        length = 1 + self.nbits + nparity + self.nstop
+        length = self.getPacketLength()
         
         # Assemble it
         d = bitarray('0' * length)

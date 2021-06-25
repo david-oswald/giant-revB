@@ -122,8 +122,9 @@ class glitcher:
         '''
         #self.reset_fpga()
         self.dac.setEnabled(True)
-        self.dac.setTestModeEnabled(0)
+        self.dac.setTestModeEnabled(1)
         self.dac.setRfidModeEnabled(0)
+        return
         
         # Mux the internal output 0 to the same pin and set it to zero
         io = gpio()
@@ -178,9 +179,18 @@ class glitcher:
         s = uart(GPIO_Pins.GPIO6.value, GPIO_Pins.GPIO5.value, baudrate, 
                  8, UartParity.NONE, 1)
         
-        time.sleep(1)
+        time.sleep(.2)
         
+        logging.info("Send first buffer")
         s.sendBuffer([0xBB, 0xCC, 0xAA])
+        
+        time.sleep(.2)
+        
+        logging.info("Send second buffer")
+        s.sendBuffer([0x11, 0x22, 0x33])
+        
+        logging.info("Wait for a byte")
+        s.waitForByte()
         
     def clear_pulses(self):
         '''Clears all pulses in the dac'''
@@ -203,8 +213,8 @@ if __name__ == "__main__":
         glitcher.reset_fpga()
         # glitcher.test_gpio()
         # glitcher.test_utx()
-        glitcher.test_uart()
-        # glitcher.test_fi()
+        #glitcher.test_uart()
+        glitcher.test_fi()
     except Exception as e:
         logging.error(traceback.format_exc())
         

@@ -42,8 +42,8 @@ class Registers(Enum):
     UTX_STATUS = 22
     
     # URX
-    URX_STATUS = 23,        
-    URX_DATA_OUT = 24,  
+    URX_STATUS = 23       
+    URX_DATA_OUT = 24  
     URX_PACKET_SIZE_OUT_LOW = 25 
     URX_PACKET_COUNT = 26
     URX_PACKET_SIZE_OUT_HIGH = 29
@@ -58,7 +58,6 @@ class Registers(Enum):
     SC_CONTROL = 34
     SC_DATA_IN = 35
     
-    # PIC programmer
     PIC_CONTROL = 36
     PIC_COMMAND = 37
     PIC_DATA_IN_L = 38
@@ -313,8 +312,8 @@ class GPIO_Select_Bits(Enum):
     UTX_DATA_OUT_VALID = 0
     FI_TRIGGER = 1
     FI_INJECT_FAULT = 2
-    UTX_START = 3,
-    URX_DATA_IN_WITH_TX = 4,
+    UTX_START = 3
+    URX_DATA_IN_WITH_TX = 4
     DDR_DMA_START = 5
     SC_DATA_SENDING_TRIGGER = 6
     SC_DATA_SENT_TRIGGER = 7

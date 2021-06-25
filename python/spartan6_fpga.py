@@ -17,24 +17,28 @@ class spartan6_fpga:
     @staticmethod
     def getInstance():
         if spartan6_fpga.__instance is None:
-            spartan6_fpga(100e6)
+            spartan6_fpga(100e6, 50e6)
         return spartan6_fpga.__instance
 
 
-    def __init__(self, f_clk, usb_device = None):
+    def __init__(self, f_clk_fast, f_clk_normal, usb_device = None):
         if spartan6_fpga.__instance is not None:
             raise Exception("This class is a singleton")
         else:
             self.opened = False
-            self.f_clk = f_clk
+            self.f_clk_fast = f_clk_fast
+            self.f_clk_normal = f_clk_normal
             self.dev = usb_device
             spartan6_fpga.__instance = self
 
-    def getFClk(self): 
-        return self.f_clk
+    def getFClkFast(self): 
+        return self.f_clk_fast
+    
+    def getFClkNormal(self): 
+        return self.f_clk_normal
 	
     def getNsToPoint(self): 
-        return self.f_clk/1e9
+        return self.f_clk_fast/1e9
 
     def __del__(self):
         """Release the USB connection"""
