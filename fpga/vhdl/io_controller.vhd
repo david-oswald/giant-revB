@@ -47,7 +47,10 @@ use UNISIM.vcomponents.all;
 entity io_controller is
 	generic(
 		WR_REG_COUNT : natural := 32;
-		RD_REG_COUNT : natural := 32
+		RD_REG_COUNT : natural := 32;
+		-- Warning: this is overdimensioned, so if WR_REG_COUNT is larger than 256
+		-- this will not correctly init
+		WR_REG_INIT_VALUES : byte_vector(255 downto 0) := (others => (others => '0'))
 	);
 	port( 
 		-- uC side clock
@@ -147,6 +150,7 @@ architecture behavioral of io_controller is
 	signal state, state_next : state_type;
 	
 	signal register_file_writable_buf : byte_vector(WR_REG_COUNT-1 downto 0);
+	signal register_file_writable_init : byte_vector(WR_REG_COUNT-1 downto 0);
 	signal register_file_writable_buf_next : byte_vector(WR_REG_COUNT-1 downto 0);
 	signal register_file_w_buf : std_logic_vector(RD_REG_COUNT+WR_REG_COUNT-1 downto 0);
 	signal register_file_w_buf_next : std_logic_vector(RD_REG_COUNT+WR_REG_COUNT-1 downto 0);
@@ -185,6 +189,11 @@ begin
 	
 	register_file_writable <= register_file_writable_buf;
 	register_file_w <= register_file_w_buf;
+	
+	-- Init values
+	GENERATE_STMT: for entry in 0 to WR_REG_COUNT-1 generate
+		register_file_writable_init(entry) <= WR_REG_INIT_VALUES(entry);
+	end generate;
 	
 	-- FSM next state decoding
 	NEXT_STATE_DECODE : process(state, uc_in_empty, uc_in_empty_prev,
@@ -265,7 +274,10 @@ begin
 				
 				uc_in_empty_prev <= '1';
 				command_byte <= (others => '0');
-				register_file_writable_buf <= (others => (others => '0'));
+				
+				-- Init values
+				register_file_writable_buf <= register_file_writable_init;
+				
 				register_file_w_buf <= (others => '0');
 				uc_out_data_synced <= (others => '0');
 				uc_out_w_en_int <= '0';

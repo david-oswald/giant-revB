@@ -138,7 +138,10 @@ architecture behavioral of main is
 	component io_controller is
 		generic(
 			WR_REG_COUNT : natural := 32;
-			RD_REG_COUNT : natural := 32
+			RD_REG_COUNT : natural := 32;
+			-- Warning: this is overdimensioned, so if WR_REG_COUNT is larger than 256
+			-- this will not correctly init
+			WR_REG_INIT_VALUES : byte_vector(255 downto 0) := (others => (others => '0'))
 		);
 		port( 
 			clk_in : in std_logic;
@@ -766,7 +769,7 @@ begin
 	utrig2_status(7 downto 2) <= (others => '0');
 	register_file_readonly(28) <= utrig2_status;
 	
-	-- UTX interface
+	-- URX interface
 	-- Register mapping:
 	-- urx_status               (r)  : 23
 	-- urx_data_out             (r)  : 24
@@ -894,7 +897,17 @@ begin
 	IO_CONTROLLER_inst : io_controller
 	generic map(
 		WR_REG_COUNT => WR_REG_COUNT,
-		RD_REG_COUNT => RD_REG_COUNT
+		RD_REG_COUNT => RD_REG_COUNT,
+		-- Default some DAC values to mid-point instead of zero:
+		-- dac_v_low      (r/w): 40 (32 + 8)
+		-- dac_v_high     (r/w): 41 (32 + 9)
+		-- dac_v_off      (r/w): 46 (32 + 14)
+		WR_REG_INIT_VALUES => (
+			8 => "10000000", 
+			9 => "10000000", 
+			14 => "10000000", 
+			others => (others => '0')
+		)
 	)
 	port map( 
 		clk_in => clk_48,
