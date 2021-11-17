@@ -1743,7 +1743,7 @@ distributor RS 112-3794</description>
 <element name="GPIO2" library="pinhead" package="1X10" value="" x="4" y="26" smashed="yes" rot="R270">
 <attribute name="VALUE" x="0.825" y="38.7" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="C19" library="rcl" package="C0805K" value="10n" x="8" y="36" smashed="yes" rot="MR270">
+<element name="C19" library="rcl" package="C0805K" value="100n" x="8" y="36" smashed="yes" rot="MR270">
 <attribute name="NAME" x="9.875" y="35" size="1.016" layer="26" rot="MR90"/>
 </element>
 <element name="TP_5V" library="testpad" package="B1,27" value="TPB1,27" x="21" y="23" smashed="yes">

@@ -1,30 +1,10 @@
 ###############################################################################
-# This example shows how to glitch the bootloader of an LPC1343 to bypass CRP
-# Partially based on https://github.com/toothlessco/arty-glitcher/blob/master/python/assignment5.py
-# The example uses the LPC-P1343 from Olimex (https://www.olimex.com/Products/ARM/NXP/LPC-P1343/)
+# This example shows how to 
+# Partially based on 
+# The example uses the 
 # For this to work, the following connections and changes are needed:
 #
-#  - cut the 3.3V_CORE and 3.3V_IO jumpers, connect the chip side with a wire,
-#    and then connect them to the glitch output
-#
-#  - remove C1 and C4 (decoupling caps)
-#   
-#  - close the BLD_E jumper and connect P0_2 to GND to enter the bootloader
-# 
-#  - connect the bootloader RX/TX pins (on UEXT) to a USB-to-serial adapter 
-#    (e.g. a CP2101-based one)
-#
-#  - connect 3V3 and GND from the USB-to-serial to the respective pins on the
-#    UEXT connector
-#
-#  - connect the RST pin to the GIAnT (I use IO1 pin 6 here)
-#
-# Example success:
-# v = 0.500000, w = 260, o = 52900, repeat = 1
-# !!! Yeah, unprotected !!!
-# 'R 0 4\r0\r\n$_!\\`$!`0\r\n299\r\n'
-# WOOT!
-# v = 0.500000, w = 260, o = 52900
+
 #
 ###############################################################################
 
@@ -39,10 +19,6 @@ from gpio import gpio
 # Change this depending on your setup
 SER_PORT = "com7"
 
-# Fixed constants
-PROTECTED = "prot"
-UNPROTECTED = "unprot"
-EOL = b"\r\n"
 
 def open_port(serial, baud):
     logging.info(f"Serial communication opened on port {serial} at {baud} baud.")
@@ -139,7 +115,7 @@ def close_port(serial):
 
 
 if __name__=="__main__":
-    port = open_port(SER_PORT, 115200)
+    port = open_port(SER_PORT, 9600)
     
     logging.basicConfig(level = logging.INFO)
 

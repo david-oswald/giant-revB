@@ -14131,7 +14131,7 @@ http://www.farnell.com/datasheets/2012663.pdf
 <part name="SUPPLY5" library="supply2" deviceset="GND1" device=""/>
 <part name="R_GND1" library="rcl" deviceset="R-EU_" device="R0805" value="0"/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
-<part name="C19" library="rcl" deviceset="C-EU" device="C0805K" value="10n"/>
+<part name="C19" library="rcl" deviceset="C-EU" device="C0805K" value="100n"/>
 <part name="GND17" library="supply1" deviceset="GND" device=""/>
 <part name="TP_5V" library="testpad" deviceset="TP" device="B1,27" value="TPB1,27"/>
 <part name="FRAME2" library="frames" deviceset="A4L-LOC" device=""/>
