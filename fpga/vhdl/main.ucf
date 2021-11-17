@@ -86,6 +86,22 @@ NET "gpio1[5]" IOSTANDARD = LVCMOS33;
 NET "gpio1[6]" IOSTANDARD = LVCMOS33;
 NET "gpio1[7]" IOSTANDARD = LVCMOS33;
 
+## Transistors
+NET "transistors[0]" LOC = P7; 
+NET "transistors[1]" LOC = M7; 
+NET "transistors[2]" LOC = R7; 
+NET "transistors[3]" LOC = P8; 
+
+NET "transistors[0]" IOSTANDARD = LVCMOS33;
+NET "transistors[1]" IOSTANDARD = LVCMOS33;
+NET "transistors[2]" IOSTANDARD = LVCMOS33;
+NET "transistors[3]" IOSTANDARD = LVCMOS33;
+
+NET "transistors[0]" SLEW = FAST;
+NET "transistors[1]" SLEW = FAST;
+NET "transistors[2]" SLEW = FAST;
+NET "transistors[3]" SLEW = FAST;
+
 ## DAC
 NET "dac_clk" LOC = E11;		
 NET "dac_v_out[0]" LOC = C5;

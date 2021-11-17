@@ -114,6 +114,9 @@ entity main is
 		-- GPIO2: to be done
 		-- gpio2 : inout std_logic_vector(7 downto 0)
 		
+		-- transistor outputs
+		transistors : out std_logic_vector(3 downto 0);
+		
 		-- Clk pins
 		clk_r9 : out std_logic;
 		clk_2  : out std_logic;
@@ -1448,6 +1451,12 @@ begin
 	led(1) <= thresh_armed;
 	led(2) <= fi_trigger;
 	led(3) <= utiming_out;
+	
+	-- Transistors
+	transistors(0) <= fi_inject_fault; -- T1
+	transistors(1) <= '0'; -- T2
+	transistors(2) <= not fi_inject_fault; -- T3
+	transistors(3) <= '0'; -- T4
 	
 	
 	-- GPIO
