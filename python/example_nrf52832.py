@@ -54,15 +54,15 @@ def check_protected():
 def main():
     logging.basicConfig(level = logging.INFO)
 
-    glitcher = glitcher()
-    glitcher.reset_fpga() 
-    glitcher.dac.setTestModeEnabled(0)
-    glitcher.dac.setRfidModeEnabled(0)
+    gl = glitcher()
+    gl.reset_fpga() 
+    gl.dac.setTestModeEnabled(0)
+    gl.dac.setRfidModeEnabled(0)
     
     io = gpio()
 
     # Trigger when DAC power high (uc VCC high)
-    glitcher.dac.setTriggerEnableState(
+    gl.dac.setTriggerEnableState(
         Register_Bits.FI_TRIGGER_CONTROL_DAC_POWER.value,
         True
     )
@@ -88,27 +88,27 @@ def main():
 
     # Both fault voltage and normal voltage are 3.3V.
     # We want the fault on T1, not on DAC power.
-    glitcher.set_voltages(3.3, 3.3, 0)
-    glitcher.dac.setEnabled(False)
+    gl.set_voltages(3.3, 3.3, 0)
+    gl.dac.setEnabled(False)
 
     while run:
         print("Attempting to glitch...")
         print("w = {:d}, o = {:d}, repeat = {:d}".format(w, offset, r))
         # Turn off uc
-        glitcher.dac.setEnabled(False)
+        gl.dac.setEnabled(False)
         time.sleep(0.05)
         
         # Clean up any previous pulses
-        glitcher.dac.clearPulses()
+        gl.dac.clearPulses()
     
         # Set a pulse
-        glitcher.add_pulse(offset, w)
+        gl.add_pulse(offset, w)
         
         # Arm the fault
-        glitcher.dac.arm()
+        gl.dac.arm()
         
         # Bring uc out of reset. This will also trigger the glitch
-        glitcher.dac.setEnabled(True)
+        gl.dac.setEnabled(True)
         time.sleep(0.05)
         
         # Now check if we succeeded
@@ -133,7 +133,7 @@ def main():
             print("w = {:d}, o = {:d}".format(w, offset))
             run = False
     
-    glitcher.close()
+    gl.close()
 
 
 if __name__=="__main__":
