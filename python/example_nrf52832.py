@@ -15,6 +15,7 @@ For this to work, the following connections are needed:
 **IMPORTANT NOTE**: Also download
 https://github.com/openocd-org/openocd/blob/master/tcl/target/nrf52.cfg
 to the directory you're running this from.
+You'll need OpenOCD installed for the CRP check command to work.
 
 Example success:
     b'Open On-Chip Debugger 0.11.0\n...Info : nrf52.cpu: hardware has 6 breakpoints...'
