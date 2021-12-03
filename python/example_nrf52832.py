@@ -12,9 +12,9 @@ For this to work, the following connections are needed:
 - Connect SWDIO and SWDCLK on the nRF to those pins on an ST-LINK or
   similar.
 
-**IMPORTANT NOTE**: Also download
+**IMPORTANT NOTE**: Make sure yoiu have
 https://github.com/openocd-org/openocd/blob/master/tcl/target/nrf52.cfg
-to the directory you're running this from.
+in the directory you're running this from.
 You'll need OpenOCD installed for the CRP check command to work.
 
 Example success:
