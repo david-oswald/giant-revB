@@ -33,7 +33,20 @@ from gpio import gpio
 import subprocess
 
 
+# String to search for in the openocd output.
+# Going by the number of breakpoints available can be a good indicator,
+# but firmware may vary.
+OPENOCD_CRP_CHECK = "6 breakpoints"
+
+
 def check_protected():
+    """
+    Returns True if the uc is still protected, or False if it isn't.
+
+    Looks for a string in the openocd init output.
+    If you don't know what string to look for, modify this function to dump
+    the firmware and check whether it dumped and is not filled with "#".
+    """
     try:
         output = subprocess.check_output(
             [
@@ -43,7 +56,7 @@ def check_protected():
             ],
             stderr=subprocess.STDOUT
         )
-        if "6 breakpoints" in str(output):
+        if OPENOCD_CRP_CHECK in str(output):
             print(str(output))
             return False
     except Exception as e:
@@ -53,6 +66,16 @@ def check_protected():
 
 
 def main():
+    """
+    Iterate over the parameter search space and inject a voltage glitch.
+
+    The uc is reset before every voltage glitch by disabling and then enabling
+    the DAC.
+    The trigger (start of the glitch offset period) is the DAC being enabled,
+    so the glitch is triggered every time the uc starts receiving power.
+
+    `enable DAC -> wait for the offset period -> short T1 to GND`
+    """
     logging.basicConfig(level = logging.INFO)
 
     gl = glitcher()
