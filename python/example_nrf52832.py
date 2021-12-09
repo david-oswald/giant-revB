@@ -18,9 +18,13 @@ in the directory you're running this from.
 You'll need OpenOCD installed for the CRP check command to work.
 
 Example success:
-    b'Open On-Chip Debugger 0.11.0\n...Info : nrf52.cpu: hardware has 6 breakpoints...'
+    Attempting to glitch...
+    w = 180, o = 1071000, repeat = 1
+    Protected! Next parameter.
+    Attempting to glitch...
+    w = 180, o = 1071000, repeat = 2
     Success!
-    w = 120, o = 1069000
+    w = 180, o = 1071000
 """
 
 import time
@@ -33,32 +37,27 @@ from gpio import gpio
 import subprocess
 
 
-# String to search for in the openocd output.
-# Going by the number of breakpoints available can be a good indicator,
-# but firmware may vary.
-OPENOCD_CRP_CHECK = "6 breakpoints"
-
-
 def check_protected():
     """
     Returns True if the uc is still protected, or False if it isn't.
 
-    Looks for a string in the openocd init output.
-    If you don't know what string to look for, modify this function to dump
-    the firmware and check whether it dumped and is not filled with "#".
+    Attempts to dump the firmware to nrf52_dump.bin and then reads the
+    first four bytes to check whether it is a non-empty dump, in which
+    case it will return False.
     """
     try:
         output = subprocess.check_output(
             [
                 'openocd', '-f', 'interface/stlink.cfg',
                 '-f', 'nrf52.cfg', '-c',
-                'init;exit'
+                'init;dump_image nrf52_dump.bin 0x0 0x1000;exit'
             ],
             stderr=subprocess.STDOUT
         )
-        if OPENOCD_CRP_CHECK in str(output):
-            print(str(output))
-            return False
+        with open("nrf52_dump.bin", "rb") as f:
+            if f.read(4) != b"\x00\x00\x00#":
+                return False
+            return True
     except Exception as e:
         print(e)
         pass
