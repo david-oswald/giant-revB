@@ -67,11 +67,36 @@ WOOT!
 v = 0.500000, w = 260, o = 52900
 ```
 
+### nRF52832
+
+The APPROTECT bypass exploit (https://limitedresults.com/2021/03/the-pocketglitcher/ and https://github.com/pd0wm/airtag-dump) is implemented in [example_nrf52832.py](https://github.com/david-oswald/giant-revB/blob/nrf52832/python/example_nrf52832.py).
+With an adjusted offset, it is also likely to work on other nRF52 microcontrollers.
+
+The following connections are needed:
+
+- Solder a wire to DEC1 on the nRF and connect it to T1 on the GIAnT
+  (T1 shorts to ground when the fault is injected).
+- It may be necessary to remove the capacitor on DEC1.
+- Connect VCC on the nRF to DAC output on the GIAnT, and GND to GND.
+- Connect SWDIO and SWDCLK on the nRF to those pins on an ST-LINK or
+  similar.
+
+Example success:
+
+```
+Attempting to glitch...
+w = 180, o = 1071000, repeat = 1
+Protected! Next parameter.
+Attempting to glitch...
+w = 180, o = 1071000, repeat = 2
+Success!
+w = 180, o = 1071000
+```
+
 ### Further planned examples
 
  * General built-in support for at least UART and SWD (for SWD see here: https://research.kudelskisecurity.com/2019/07/31/swd-part-2-the-mem-ap/)
  * ESP32: https://limitedresults.com/2019/09/pwn-the-esp32-secure-boot/
- * nRF52: https://limitedresults.com/2021/03/the-pocketglitcher/ and https://github.com/pd0wm/airtag-dump
  * STM32F0: https://www.usenix.org/system/files/conference/woot17/woot17-paper-obermaier.pdf
  * MSP430 (MSP430F5172): https://tches.iacr.org/index.php/TCHES/article/download/7390/6562/
  * STM32F1/F3: https://tches.iacr.org/index.php/TCHES/article/download/7390/6562/
