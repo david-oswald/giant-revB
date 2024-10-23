@@ -44,11 +44,11 @@ PROTECTED = "prot"
 UNPROTECTED = "unprot"
 EOL = b"\r\n"
 
-def open_port(serial, baud):
+def openPort(serial, baud):
     logging.info(f"Serial communication opened on port {serial} at {baud} baud.")
     return ser.Serial(serial, baud, timeout=0.2)
 
-def expect_read(serial, expected):
+def expectRead(serial, expected):
     result = ""
     # Don't attempt to read more than 1 times
     for i in range(0, 1):
@@ -59,7 +59,7 @@ def expect_read(serial, expected):
     print("! Expected = " + repr(expected) + " got " + repr(result))
     return result
 
-def read_address(serial, address, length):
+def readAddress(serial, address, length):
     cmd = 'R {:d} {:d}\r\n'.format(address, length)
     serial.write(cmd.encode())
 
@@ -73,14 +73,14 @@ def read_address(serial, address, length):
     # Check if command succeeded.
     if '\r0\r\n' in result and not('\r09' in result):
         serial.write(b'OK\r\n')
-        expect_read(serial, 'OK\r\n')
+        expectRead(serial, 'OK\r\n')
         return result
     
     print(repr(result), end = " - ")
 
     return None
 
-def check_protected(serial, khz, debugPrint):
+def checkProtected(serial, khz, debugPrint):
 
     # Syncing the device
     serial.write(b"?")
@@ -123,7 +123,7 @@ def check_protected(serial, khz, debugPrint):
         print("Communications setup with target device succeeded.")
 
     # Check if protected
-    r = read_address(serial, 0, 4)
+    r = readAddress(serial, 0, 4)
     
     if r is None:
         return PROTECTED
@@ -139,7 +139,7 @@ def close_port(serial):
 
 
 if __name__=="__main__":
-    port = open_port(SER_PORT, 115200)
+    port = openPort(SER_PORT, 115200)
     
     logging.basicConfig(level = logging.INFO)
 
@@ -210,7 +210,7 @@ if __name__=="__main__":
         time.sleep(0.05)
         
         # Now check if we succeeded
-        status = check_protected(port, 12000, False);
+        status = checkProtected(port, 12000, False);
         
         if status == False:
             print("Communication failed, restarting")
