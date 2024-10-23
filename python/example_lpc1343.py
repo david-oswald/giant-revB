@@ -144,7 +144,7 @@ if __name__=="__main__":
     logging.basicConfig(level = logging.INFO)
 
     glitcher = glitcher()
-    glitcher.reset_fpga() 
+    glitcher.resetFpga() 
     glitcher.dac.setTestModeEnabled(0)
     glitcher.dac.setRfidModeEnabled(0)
     
@@ -157,7 +157,7 @@ if __name__=="__main__":
     glitcher.dac.setTriggerEnableState(Register_Bits.FI_TRIGGER_GPIO_OUTPUT_0.value, True)
     
     # Set the fault voltage, normal voltage, off voltage
-    glitcher.set_voltages(0.5, 1.9, 0)
+    glitcher.setVoltages(0.5, 1.9, 0)
     glitcher.dac.setEnabled(True)
     
     # Limits
@@ -188,7 +188,7 @@ if __name__=="__main__":
     v = v_start
     r = 0
     
-    glitcher.set_voltages(v, v_normal, 0)
+    glitcher.setVoltages(v, v_normal, 0)
     
     while run:
         
@@ -200,7 +200,7 @@ if __name__=="__main__":
         glitcher.dac.clearPulses()
     
         # Set a pulse
-        glitcher.add_pulse(offset, w)
+        glitcher.addPulse(offset, w)
         
         # Arm the fault
         glitcher.dac.arm()
@@ -231,7 +231,7 @@ if __name__=="__main__":
                 offset = offset_start
                 w = w_start
                 v = v + v_step
-                glitcher.set_voltages(v, v_normal, 0)
+                glitcher.setVoltages(v, v_normal, 0)
             else:
                 run = False
             

@@ -20,11 +20,11 @@ from gpio import gpio
 SER_PORT = "com7"
 
 
-def open_port(serial, baud):
+def openPort(serial, baud):
     logging.info(f"Serial communication opened on port {serial} at {baud} baud.")
     return ser.Serial(serial, baud, timeout=0.2)
 
-def expect_read(serial, expected):
+def expectRead(serial, expected):
     result = ""
     # Don't attempt to read more than 1 times
     for i in range(0, 1):
@@ -35,7 +35,7 @@ def expect_read(serial, expected):
     print("! Expected = " + repr(expected) + " got " + repr(result))
     return result
 
-def read_address(serial, address, length):
+def readAddress(serial, address, length):
     cmd = 'R {:d} {:d}\r\n'.format(address, length)
     serial.write(cmd.encode())
 
@@ -49,14 +49,14 @@ def read_address(serial, address, length):
     # Check if command succeeded.
     if '\r0\r\n' in result and not('\r09' in result):
         serial.write(b'OK\r\n')
-        expect_read(serial, 'OK\r\n')
+        expectRead(serial, 'OK\r\n')
         return result
     
     print(repr(result), end = " - ")
 
     return None
 
-def check_protected(serial, khz, debugPrint):
+def checkProtected(serial, khz, debugPrint):
 
     # Syncing the device
     serial.write(b"?")
@@ -99,7 +99,7 @@ def check_protected(serial, khz, debugPrint):
         print("Communications setup with target device succeeded.")
 
     # Check if protected
-    r = read_address(serial, 0, 4)
+    r = readAddress(serial, 0, 4)
     
     if r is None:
         return PROTECTED
@@ -115,12 +115,12 @@ def close_port(serial):
 
 
 if __name__=="__main__":
-    port = open_port(SER_PORT, 9600)
+    port = openPort(SER_PORT, 9600)
     
     logging.basicConfig(level = logging.INFO)
 
     glitcher = glitcher()
-    glitcher.reset_fpga() 
+    glitcher.resetFpga() 
     glitcher.dac.setTestModeEnabled(0)
     glitcher.dac.setRfidModeEnabled(0)
     
@@ -133,7 +133,7 @@ if __name__=="__main__":
     glitcher.dac.setTriggerEnableState(Register_Bits.FI_TRIGGER_GPIO_OUTPUT_0.value, True)
     
     # Set the fault voltage, normal voltage, off voltage
-    glitcher.set_voltages(0.5, 1.9, 0)
+    glitcher.setVoltages(0.5, 1.9, 0)
     glitcher.dac.setEnabled(True)
     
     # Limits
@@ -164,7 +164,7 @@ if __name__=="__main__":
     v = v_start
     r = 0
     
-    glitcher.set_voltages(v, v_normal, 0)
+    glitcher.setVoltages(v, v_normal, 0)
     
     while run:
         
@@ -176,7 +176,7 @@ if __name__=="__main__":
         glitcher.dac.clearPulses()
     
         # Set a pulse
-        glitcher.add_pulse(offset, w)
+        glitcher.addPulse(offset, w)
         
         # Arm the fault
         glitcher.dac.arm()
@@ -186,7 +186,7 @@ if __name__=="__main__":
         time.sleep(0.05)
         
         # Now check if we succeeded
-        status = check_protected(port, 12000, False);
+        status = checkProtected(port, 12000, False);
         
         if status == False:
             print("Communication failed, restarting")
@@ -207,7 +207,7 @@ if __name__=="__main__":
                 offset = offset_start
                 w = w_start
                 v = v + v_step
-                glitcher.set_voltages(v, v_normal, 0)
+                glitcher.setVoltages(v, v_normal, 0)
             else:
                 run = False
             

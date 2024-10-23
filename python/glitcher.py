@@ -24,7 +24,7 @@ class glitcher:
         self.fpga = spartan6_fpga.getInstance()
 
         # Initialise FPGA
-        self.reset_fpga()
+        self.resetFpga()
 
         self.dac.setTestModeEnabled(0)
         self.dac.setRfidModeEnabled(0)
@@ -40,32 +40,32 @@ class glitcher:
         self.V_STEP = v_step/256
 
 
-    def calc_voltage(self, v):
+    def calcVoltage(self, v):
         '''Calculates the value to write to the GIAnT for the voltage'''
         return int(v/self.V_STEP + 128)
 
-    def set_voltages(self, f_voltage, norm_voltage, off_voltage):
+    def setVoltages(self, f_voltage, norm_voltage, off_voltage):
         '''Write the voltages to the GIAnT 
 
         :param f_voltage: the fault voltage (in V - e.g. 1.8V)
         :param norm_voltage: the normal voltage (e.g. 3.3V)
         :param off_voltage: the off voltage (e.g. 0V)
         '''
-        v_normal = self.calc_voltage(norm_voltage)
-        v_off = self.calc_voltage(off_voltage)
-        v_fault = self.calc_voltage(f_voltage)
+        v_normal = self.calcVoltage(norm_voltage)
+        v_off = self.calcVoltage(off_voltage)
+        v_fault = self.calcVoltage(f_voltage)
 
         # Set voltages
         self.dac.setFaultVoltage(v_fault)
         self.dac.setNormalVoltage(v_normal)
         self.dac.setOffVoltage(v_off)
 
-    def set_f_voltage(self, f_voltage):
+    def setFaultVoltage(self, f_voltage):
         '''Calculates and sets only the fault voltage'''
-        v_fault = self.calc_voltage(f_voltage)
+        v_fault = self.calcVoltage(f_voltage)
         self.dac.setFaultVoltage(v_fault)
 
-    def add_pulse(self, offset, width, overwrite = 0):
+    def addPulse(self, offset, width, overwrite = 0):
         '''Sets the width and offset of a pulse - given in nanosecond
         
         :param width: width of the pulse (in nanosecond)
@@ -78,14 +78,14 @@ class glitcher:
     def close(self):
         return self.fpga.close()
            
-    def test_mode(self):
+    def testMode(self):
         '''
             Enables the test mode on the GIAnT - Voltage goes from highest possible to lowest possible
         '''
-        self.reset_fpga()
+        self.resetFpga()
         self.dac.setTestModeEnabled(1)
 
-    def reset_fpga(self):
+    def resetFpga(self):
         '''
             Resets the FPGA connection
         '''
@@ -97,7 +97,7 @@ class glitcher:
         self.dac.setEnabled(1)
 
 
-    def test_gpio(self):
+    def testGpio(self):
         io = gpio()
         
         # Mux a constant 1 on GPIO1_6
@@ -116,7 +116,7 @@ class glitcher:
         #time.sleep(2)
         #io.setInternalOutput(GPIO_Pins.GPIO0.value, False);
         
-    def test_fi(self):
+    def testFi(self):
         '''
             tests the Fault Injection on the FPGA. Adds two pulses, sets a software trigger and arms the FPGA
         '''
@@ -136,14 +136,14 @@ class glitcher:
         self.dac.setTriggerEnableState(Register_Bits.FI_TRIGGER_GPIO_OUTPUT_0.value, True)
 
         # Set the fault voltage, normal voltage, off voltage
-        self.set_voltages(0, 3.3, 0)
+        self.setVoltages(0, 3.3, 0)
 
         # Clean up any previous pulses
         self.dac.clearPulses()
 
         # Set a pulse
-        self.add_pulse(200000, 50)
-        self.add_pulse(1000, 50)
+        self.addPulse(200000, 50)
+        self.addPulse(1000, 50)
         
         # Arm the fault
         self.dac.arm()
@@ -151,7 +151,7 @@ class glitcher:
         # This should trigger
         io.setInternalOutput(GPIO_Pins.GPIO0.value, True);
 
-    def test_utx(self):
+    def testUtx(self):
         
         io = gpio()
         tx = utx()
@@ -173,7 +173,7 @@ class glitcher:
         tx.writeBuffer(data, 0)
         tx.send()
 
-    def test_uart(self):
+    def testUart(self):
         
         baudrate = 115200
         s = uart(GPIO_Pins.GPIO6.value, GPIO_Pins.GPIO5.value, baudrate, 
@@ -192,7 +192,7 @@ class glitcher:
         logging.info("Wait for a byte")
         s.waitForByte()
         
-    def clear_pulses(self):
+    def clearPulses(self):
         '''Clears all pulses in the dac'''
         self.dac.clearPulses()
 
@@ -210,11 +210,11 @@ if __name__ == "__main__":
     glitcher = glitcher()
 
     try:
-        glitcher.reset_fpga()
-        # glitcher.test_gpio()
-        # glitcher.test_utx()
-        #glitcher.test_uart()
-        glitcher.test_fi()
+        glitcher.resetFpga()
+        # glitcher.testGpio()
+        # glitcher.testUtx()
+        #glitcher.testUart()
+        glitcher.testFi()
     except Exception as e:
         logging.error(traceback.format_exc())
         

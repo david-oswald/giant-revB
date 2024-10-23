@@ -37,7 +37,7 @@ from gpio import gpio
 import subprocess
 
 
-def check_protected():
+def checkProtected():
     """
     Returns True if the uc is still protected, or False if it isn't.
 
@@ -78,7 +78,7 @@ def main():
     logging.basicConfig(level = logging.INFO)
 
     gl = glitcher()
-    gl.reset_fpga() 
+    gl.resetFpga() 
     gl.dac.setTestModeEnabled(0)
     gl.dac.setRfidModeEnabled(0)
     
@@ -111,7 +111,7 @@ def main():
 
     # Both fault voltage and normal voltage are 3.3V.
     # We want the fault on T1, not on DAC power.
-    gl.set_voltages(3.3, 3.3, 0)
+    gl.setVoltages(3.3, 3.3, 0)
     gl.dac.setEnabled(False)
 
     while run:
@@ -125,7 +125,7 @@ def main():
         gl.dac.clearPulses()
     
         # Set a pulse
-        gl.add_pulse(offset, w)
+        gl.addPulse(offset, w)
         
         # Arm the fault
         gl.dac.arm()
@@ -135,7 +135,7 @@ def main():
         time.sleep(0.05)
         
         # Now check if we succeeded
-        protected = check_protected()
+        protected = checkProtected()
         
         if protected:
             print("Protected! Next parameter.")
